@@ -9,6 +9,7 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.Set;
 
+import bbk.pij.jsted02.data.DataInterface;
 import bbk.pij.jsted02.interfaces.Contact;
 import bbk.pij.jsted02.interfaces.ContactManager;
 import bbk.pij.jsted02.interfaces.FutureMeeting;
@@ -25,6 +26,10 @@ public class ContactManagerImpl implements ContactManager {
 	 * ready to be used.
 	 */
 	private boolean initialised = false;
+	/**
+	 * DataInterface variable, this will provide the data used in the system.
+	 */
+	private DataInterface dataInterface = new DataInterface();
 
 	/**
 	 * Constructor, runs initialisation code to initialise the system.
@@ -150,7 +155,7 @@ public class ContactManagerImpl implements ContactManager {
 	 */
 	@Override
 	public void flush() {
-		// TODO Save changes to contacts.txt and close file handles gracefully
+		dataInterface.flush();
 	}
 	
 	/**
@@ -188,7 +193,8 @@ public class ContactManagerImpl implements ContactManager {
 	 */
 	private void init()
 	{
-		//TODO Initialise system (load contacts.txt and check all is good).
+		// Load data for the data interface object
+		dataInterface.init();
 		//TODO If an exception occurred previously, would we find a corrupted contacts.txt file?
 		this.initialised = true;
 	}

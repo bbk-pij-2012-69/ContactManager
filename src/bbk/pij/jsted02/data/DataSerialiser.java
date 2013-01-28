@@ -9,4 +9,9 @@ package bbk.pij.jsted02.data;
  */
 public class DataSerialiser {
 
+	public DataSerialiser(String fileName)
+	{
+		
+	}
+	
 }
