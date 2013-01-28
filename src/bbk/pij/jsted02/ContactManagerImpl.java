@@ -20,7 +20,22 @@ import bbk.pij.jsted02.ui.UserInterface;
  * @author Luke Stedman (jsted02), MSc CS Yr1 2012/13
  */
 public class ContactManagerImpl implements ContactManager {
+	/**
+	 * initialised flag is set to true once the system has initialised and is
+	 * ready to be used.
+	 */
+	private boolean initialised = false;
 
+	/**
+	 * Constructor, runs initialisation code to initialise the system.
+	 */
+	public ContactManagerImpl()
+	{
+		// Run the init function, this will load the require data from disk and
+		// make sure that everything is behaving itself.
+		this.init();
+	}
+	
 	/**
 	 * @see bbk.pij.jsted02.interfaces.ContactManager#addFutureMeeting(java.util.Set, java.util.Calendar)
 	 */
@@ -135,13 +150,15 @@ public class ContactManagerImpl implements ContactManager {
 	 */
 	@Override
 	public void flush() {
-		// TODO Implement functionality
+		// TODO Save changes to contacts.txt and close file handles gracefully
 	}
 	
 	/**
 	 * Launch function for Contact Manager, runs the main loop for interacting with system.
+	 * 
+	 * @return null
 	 */
-	private static void launch()
+	private void launch()
 	{
 		List<Method> methods = new ArrayList<Method>();
 		UserInterface ui = new UserInterface();
@@ -164,16 +181,55 @@ public class ContactManagerImpl implements ContactManager {
 	}
 	
 	/**
+	 * Initialise function, will load contacts data into memory and prepare
+	 *  system for use.
+	 *  
+	 *  @return null
+	 */
+	private void init()
+	{
+		//TODO Initialise system (load contacts.txt and check all is good).
+		//TODO If an exception occurred previously, would we find a corrupted contacts.txt file?
+		this.initialised = true;
+	}
+	
+	/**
+	 * Finalise function, will call flush to save to disk and make sure that
+	 *  everything is ok to shutdown the system.
+	 *  
+	 *  @return null
+	 */
+	private void finalise()
+	{
+		//TODO Clean-up system.
+		// Flush data to disk
+		this.flush();
+		//TODO If an exception occurs, should we save the data that has been edited during the session?
+		this.initialised = false;
+	}
+	
+	/**
 	 * main Java function - entry point to program
+	 * 
+	 * @return null
 	 */
 	public static void main(String [] args){
 		
-		//TODO Initialise system (load contacts.txt and check all is good).
-		//TODO If an exception occurred previously, would we find a corrupted contacts.txt file?
-		launch();
-		//TODO Clean-up system (save changes to contacts.txt and close gracefully).
-		//TODO If an exception occurs, should we save the data that has been edited during the session?
-
+		// Create ContactManagerImpl object, check the system is initialised
+		// and launch the system.
+		ContactManagerImpl cm = new ContactManagerImpl();
+		
+		if(cm.initialised)
+		{
+			cm.launch();
+		}
+		
+		// Only run the finalise code if we are initialised.
+		if(cm.initialised)
+		{
+			cm.finalise();
+		}
+		
 	}
 
 }
