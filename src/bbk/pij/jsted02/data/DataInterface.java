@@ -15,7 +15,15 @@ public class DataInterface {
 	 */
 	public final String fileName = "contacts.txt";
 	
+	/**
+	 * Serialiser object which will be used to load and save data to/from disk.
+	 */
+	private DataSerialiser serialiser = new DataSerialiser(fileName);
 	
+	/**
+	 * Data object, the data that is being updated by the system.
+	 */
+	private Object data;
 	
 	/**
 	 * Initialise function to load data from disk and into memory.
@@ -24,7 +32,7 @@ public class DataInterface {
 	 */
 	public void init()
 	{
-		
+		data = serialiser.getData();
 	}
 	
 	/**

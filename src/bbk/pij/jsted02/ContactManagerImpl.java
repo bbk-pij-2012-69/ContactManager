@@ -170,7 +170,7 @@ public class ContactManagerImpl implements ContactManager {
 		
 		//TODO Add all relevant methods to the list.
 		try {
-			methods.add(ui.getClass().getMethod("exit", null));
+			methods.add(ui.getClass().getMethod("exit"));
 		} catch (NoSuchMethodException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

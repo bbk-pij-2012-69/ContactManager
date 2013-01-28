@@ -9,13 +9,13 @@ package bbk.pij.jsted02.ui;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.lang.annotation.Annotation;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
 
 import bbk.pij.jsted02.utils.UIMethod;
@@ -74,12 +74,15 @@ public class UserInterface {
 			methodMap.put(x+1, actions.get(x));
 		}
 
+		// Print header
+		System.out.println("Contact Manager Actions.");
+
 		// Create iterator object and iterate over each MapEntry, for each 
 		// entry split the key and value, pass them to the printEntry method
 		// to be printed to console.
-		Iterator<?> i = methodMap.entrySet().iterator();
+		Iterator<Entry<Integer, Method>> i = methodMap.entrySet().iterator();
 		while(i.hasNext()){
-			Map.Entry uiMapEntry = (Map.Entry)i.next();
+			Map.Entry<Integer, Method> uiMapEntry = (Map.Entry<Integer, Method>)i.next();
 			printEntry((int) uiMapEntry.getKey(), (Method) uiMapEntry.getValue());
 		}
 
@@ -87,7 +90,10 @@ public class UserInterface {
 			System.out.print("\nPlease enter action: ");
 			BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 			String selectedOption = br.readLine();
-			methodMap.get(Integer.parseInt(selectedOption)).invoke(this, null);
+
+			//TODO Invoke on different objects
+			//TODO Correct parameters list
+			methodMap.get(Integer.parseInt(selectedOption)).invoke(this);
 			// TODO Process selectedOption
 		}
 		catch (IOException ioe) {
