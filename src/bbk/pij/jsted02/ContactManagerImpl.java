@@ -15,11 +15,9 @@ import bbk.pij.jsted02.interfaces.FutureMeeting;
 import bbk.pij.jsted02.interfaces.Meeting;
 import bbk.pij.jsted02.interfaces.PastMeeting;
 import bbk.pij.jsted02.ui.UserInterface;
-import bbk.pij.jsted02.utils.Tuple;
 
 /**
- * @author Luke Stedman (jsted02)
- *
+ * @author Luke Stedman (jsted02), MSc CS Yr1 2012/13
  */
 public class ContactManagerImpl implements ContactManager {
 
@@ -145,11 +143,23 @@ public class ContactManagerImpl implements ContactManager {
 	 */
 	private static void launch()
 	{
-		List<Tuple<String,Object>> methods = new ArrayList<Tuple<String,Object>>();
+		List<Method> methods = new ArrayList<Method>();
+		UserInterface ui = new UserInterface();
+		
+		//TODO Add all relevant methods to the list.
+		try {
+			methods.add(ui.getClass().getMethod("exit", null));
+		} catch (NoSuchMethodException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (SecurityException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
 		boolean running = true;
 		do{
-			running = UserInterface.printInterface(methods);
+			running = ui.printInterface(methods);
 		} while(running);
 	}
 	
