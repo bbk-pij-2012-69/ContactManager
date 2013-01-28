@@ -23,7 +23,6 @@ public interface ContactManager {
 	 * @param id the ID for the meeting
 	 * @return the meeting with the requested ID, or null if it there is none.
 	 * @throws IllegalArgumentException if there is a meeting with that ID happening in the future
-
 	 */
 	PastMeeting getPastMeeting(int id);
 	/**
@@ -75,7 +74,6 @@ public interface ContactManager {
 	 * @param contact one of the user’s contacts
 	 * @return the list of future meeting(s) scheduled with this contact (maybe empty).
 	 * @throws IllegalArgumentException if the contact does not exist
-
 	 */
 	List<PastMeeting> getPastMeetingList(Contact contact);
 	/**
@@ -127,7 +125,6 @@ public interface ContactManager {
 	 * @return a list with the contacts whose name contains that string.
 	 * @throws NullPointerException if the parameter is null
 	 */
-
 	Set<Contact> getContacts(String name);
 	/**
 	 * Save all data to disk.
