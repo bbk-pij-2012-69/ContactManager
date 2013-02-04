@@ -6,6 +6,8 @@
  */
 package bbk.pij.jsted02.data;
 
+import java.util.HashMap;
+
 /**
  * @author Luke Stedman (jsted02), MSc CS Yr1 2012/13
  */
@@ -19,11 +21,8 @@ public class DataInterface {
 	 * Serialiser object which will be used to load and save data to/from disk.
 	 */
 	private DataSerialiser serialiser = new DataSerialiser(fileName);
-	
-	/**
-	 * Data object, the data that is being updated by the system.
-	 */
-	private Object data;
+
+	private HashMap<String, Object> data;
 	
 	/**
 	 * Initialise function to load data from disk and into memory.
@@ -42,6 +41,6 @@ public class DataInterface {
 	 */
 	public void flush()
 	{
-		
+		serialiser.flush(this);
 	}
 }
