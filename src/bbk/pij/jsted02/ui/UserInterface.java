@@ -9,113 +9,87 @@ package bbk.pij.jsted02.ui;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-
-
-import bbk.pij.jsted02.utils.UIMethod;
+import bbk.pij.jsted02.ContactManagerImpl;
 
 /**
  * @author Luke Stedman (jsted02), MSc CS Yr1 2012/13
  */
 public class UserInterface {
 
-	private boolean running = true;
+	private ContactManagerImpl m_cmApp;
+	public final String EXIT = "Exit"; 
 	/**
-	 * exit() method, always appended to the end of existing options to allow the 
-	 * 	user to exit, once invoked it sets the running flag to false.
+	 * Member string Array containing options for user interface.
+	 */
+	private String[] m_options = {"", EXIT};
+
+	
+	/**
+	 * UserInterface class - contains logic to interact with the user.
+	 * 
+	 * @param cmApp - ContactManagerImpl object that contains all the methods 
+	 * 	to run
+	 */
+	public UserInterface(ContactManagerImpl cmApp)
+	{
+		this.m_cmApp = cmApp;
+	}
+	
+	/**
+	 * Method to print options to screen
 	 * 
 	 * @return null
 	 */
-	@UIMethod(name="Exit")
-	public void exit()
+	private void printMenu()
 	{
-		// If exit is called then set running instance variable to false.
-		// This will then be returned at the end of the printInterface method.
-		this.running = false;
+		// Initialise incremental to 1 to keep interface/lookup consistent.
+		for(int i = 1; i < m_options.length; ++i)
+		{
+			System.out.println(i + "\t" + m_options[i]);
+		}
+				
+		System.out.println("");
+		System.out.print("Please enter action: ");
 	}
-
+	
 	/**
-	 * printEntry() method, called for each action that the user can take, 
-	 * 	prints the entry to screen with the associated number id that the
-	 *  user should input to perform action.
+	 * Method to handle user input
 	 * 
-	 * @param option, number id relating to the user choice.
-	 * @param method, action to invoke.
-	 * 
-	 * @return null
+	 * @return true if still running or false to exit.
 	 */
-	private void printEntry(int option, Method action)
+	public boolean userInput()
 	{
-		// Print the output in the format #.	<NAME>
-		System.out.print(option + ".\t");
-		System.out.println(action.getAnnotation(UIMethod.class).name());
-	}
-
-	/**
-	 * printInterface() method, called to print the user interface and handles
-	 * 	the input choice made by the user.
-	 * 
-	 * @param method list, list of action methods that can be invoked. 
-	 *  
-	 * @return true if to continue running or false to quit.
-	 */	public boolean printInterface(List<Method> actions)
-	{
-		// Initialise a map of options to methods, iterate over inputs and
-		// append each method to the map while incrementing the option no.
-		Map<Integer, Method> methodMap = new HashMap<Integer, Method>();
+		// Print the menu to screen
+		this.printMenu();
 		
-		for(int x = 0; x < actions.size();++x){
-			methodMap.put(x+1, actions.get(x));
-		}
+		// Initialise selected option to blank string
+		int selectedOption = 0;
 
-		// Print header
-		System.out.println("Contact Manager Actions.");
-
-		// Create iterator object and iterate over each MapEntry, for each 
-		// entry split the key and value, pass them to the printEntry method
-		// to be printed to console.
-		Iterator<Entry<Integer, Method>> i = methodMap.entrySet().iterator();
-		while(i.hasNext()){
-			Map.Entry<Integer, Method> uiMapEntry = (Map.Entry<Integer, Method>)i.next();
-			printEntry((int) uiMapEntry.getKey(), (Method) uiMapEntry.getValue());
-		}
+		// Read input
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
 		try {
-			System.out.print("\nPlease enter action: ");
-			BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-			String selectedOption = br.readLine();
-
-			//TODO Invoke on different objects
-			//TODO Correct parameters list
-			methodMap.get(Integer.parseInt(selectedOption)).invoke(this);
-			// TODO Process selectedOption
+			selectedOption = Integer.parseInt(br.readLine());
+			if (m_options[selectedOption] == this.EXIT)
+			{
+				System.out.println("Exiting...");
+				return false;
+			}
+			
+			switch(selectedOption)
+			{
+				default:
+					System.out.println("Unknown option, please try again...");
+			}
 		}
 		catch (IOException ioe) {
 			System.out.println("Unknown error trying to read option");
-			System.exit(1);
-		} catch (NumberFormatException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IllegalAccessException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IllegalArgumentException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (InvocationTargetException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
 		}
-		
-		// Return true/false if still running.
-		return this.running;
+		catch (NumberFormatException nfe) {
+			System.out.println("Please enter the number associated with the option.");
+		}
+		System.out.println("");
+
+		return true;
 	}
-
-
 }

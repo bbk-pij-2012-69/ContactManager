@@ -41,6 +41,6 @@ public class DataInterface {
 	 */
 	public void flush()
 	{
-		serialiser.flush(this);
+		//serialiser.flush(this);
 	}
 }

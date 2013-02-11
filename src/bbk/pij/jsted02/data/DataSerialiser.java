@@ -28,7 +28,7 @@ public class DataSerialiser {
 	 * Filename to store and load the data from
 	 */
 	private String fileName;
-	
+
 	/**
 	 * FileStream used to read and write the data.
 	 */
@@ -43,7 +43,7 @@ public class DataSerialiser {
 	 * Data that is sent back to the interface.
 	 */
 	HashMap<String, Object> data;
-	
+
 	/**
 	 * DataSerialiser construct, constructs the arc	hive object for loading and
 	 *  saving the data to/from disk.
@@ -54,30 +54,30 @@ public class DataSerialiser {
 	public DataSerialiser(String fileName)
 	{
 
-		this.fileName = fileName;
-		// Create file based on the current path, the data foldername and 
-		//  the supplied filename.
-		File file = new File(Paths.get(".", this.folderName, this.fileName).toString());
-		try {
-			//Pass the file to the getFile method and load the data
-			this.oFile = getFile(file);
-			this.loaded = this.loadData();
-		}
-		catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		finally{
-			try {
-				this.oFile.close();
-			} catch (IOException e) {
-				System.err.println("ERROR: Unable to close file handle!");
-			}
-		}
+//		this.fileName = fileName;
+//		// Create file based on the current path, the data foldername and 
+//		//  the supplied filename.
+//		File file = new File(Paths.get(".", this.folderName, this.fileName).toString());
+//		try {
+//			//Pass the file to the getFile method and load the data
+//			this.oFile = getFile(file);
+//			this.loaded = this.loadData();
+//		}
+//		catch (FileNotFoundException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
+//		catch (IOException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
+//		finally{
+//		try {
+//				this.oFile.close();
+//			} catch (IOException e) {
+//				System.err.println("ERROR: Unable to close file handle!");
+//			}
+//		}
 
 	}
 
@@ -92,7 +92,7 @@ public class DataSerialiser {
 	 */
 	private FileOutputStream getFile(File file) throws IOException, FileNotFoundException
 	{
-		
+
 		// If the file does not exist we need to create them.
 		if(!file.exists())
 		{

@@ -165,23 +165,10 @@ public class ContactManagerImpl implements ContactManager {
 	 */
 	private void launch()
 	{
-		List<Method> methods = new ArrayList<Method>();
-		UserInterface ui = new UserInterface();
-		
-		//TODO Add all relevant methods to the list.
-		try {
-			methods.add(ui.getClass().getMethod("exit"));
-		} catch (NoSuchMethodException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (SecurityException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
+		UserInterface ui = new UserInterface(this);
 		boolean running = true;
 		do{
-			running = ui.printInterface(methods);
+			running = ui.userInput();
 		} while(running);
 	}
 	
@@ -194,7 +181,7 @@ public class ContactManagerImpl implements ContactManager {
 	private void init()
 	{
 		// Load data for the data interface object
-		dataInterface.init();
+		//dataInterface.init();
 		//TODO If an exception occurred previously, would we find a corrupted contacts.txt file?
 		this.initialised = true;
 	}
@@ -223,19 +210,18 @@ public class ContactManagerImpl implements ContactManager {
 		
 		// Create ContactManagerImpl object, check the system is initialised
 		// and launch the system.
-		ContactManagerImpl cm = new ContactManagerImpl();
+		ContactManagerImpl cmApp = new ContactManagerImpl();
 		
-		if(cm.initialised)
+		if(cmApp.initialised)
 		{
-			cm.launch();
+			cmApp.launch();
 		}
 		
 		// Only run the finalise code if we are initialised.
-		if(cm.initialised)
+		if(cmApp.initialised)
 		{
-			cm.finalise();
+			cmApp.finalise();
 		}
-		
 	}
 
 }
