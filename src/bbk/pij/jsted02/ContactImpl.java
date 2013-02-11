@@ -3,21 +3,33 @@
  */
 package bbk.pij.jsted02;
 
+import java.util.ArrayList;
 import bbk.pij.jsted02.interfaces.Contact;
 
 /**
- * @author jsted02
- *
+ * @author Luke Stedman (jsted02), MSc CS Yr1 2012/13
  */
 public class ContactImpl implements Contact {
 
+	private static int m_id = 0;
+	private ArrayList<String> m_notes;
+	private String m_name;
+	
+	public ContactImpl(String name, String notes)
+	{
+		++ContactImpl.m_id;
+		this.m_name = name;
+		this.m_notes = new ArrayList<String>();
+		this.m_notes.add(notes);
+		System.out.println(this.getId());
+	}
+	
 	/* (non-Javadoc)
 	 * @see bbk.pij.jsted02.interfaces.Contact#getId()
 	 */
 	@Override
 	public int getId() {
-		// TODO Auto-generated method stub
-		return 0;
+		return ContactImpl.m_id;
 	}
 
 	/* (non-Javadoc)
@@ -25,8 +37,7 @@ public class ContactImpl implements Contact {
 	 */
 	@Override
 	public String getName() {
-		// TODO Auto-generated method stub
-		return null;
+		 return this.m_name;
 	}
 
 	/* (non-Javadoc)
@@ -34,8 +45,10 @@ public class ContactImpl implements Contact {
 	 */
 	@Override
 	public String getNotes() {
-		// TODO Auto-generated method stub
-		return null;
+		StringBuilder sb = new StringBuilder();
+		for(int i = 0; i < this.m_notes.size();++i)
+			sb.append(this.m_notes.get(i) + "\n");
+		return sb.toString();
 	}
 
 	/* (non-Javadoc)
@@ -43,8 +56,7 @@ public class ContactImpl implements Contact {
 	 */
 	@Override
 	public void addNotes(String note) {
-		// TODO Auto-generated method stub
-
+		this.m_notes.add(note);
 	}
 
 }

@@ -29,7 +29,7 @@ public class ContactManagerImpl implements ContactManager {
 	/**
 	 * DataInterface variable, this will provide the data used in the system.
 	 */
-	private DataInterface dataInterface = new DataInterface();
+	private DataInterface m_dataInterface = new DataInterface();
 
 	/**
 	 * Constructor, runs initialisation code to initialise the system.
@@ -128,8 +128,8 @@ public class ContactManagerImpl implements ContactManager {
 	 */
 	@Override
 	public void addNewContact(String name, String notes) {
-		// TODO Implement functionality
-
+		ContactImpl contact = new ContactImpl(name, notes);
+		m_dataInterface.addContact(contact);
 	}
 
 	/**
@@ -155,7 +155,7 @@ public class ContactManagerImpl implements ContactManager {
 	 */
 	@Override
 	public void flush() {
-		dataInterface.flush();
+		m_dataInterface.flush();
 	}
 	
 	/**

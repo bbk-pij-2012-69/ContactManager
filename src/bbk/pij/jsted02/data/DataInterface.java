@@ -6,7 +6,10 @@
  */
 package bbk.pij.jsted02.data;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+
+import bbk.pij.jsted02.ContactImpl;
 
 /**
  * @author Luke Stedman (jsted02), MSc CS Yr1 2012/13
@@ -22,7 +25,7 @@ public class DataInterface {
 	 */
 	private DataSerialiser serialiser = new DataSerialiser(fileName);
 
-	private HashMap<String, Object> data;
+	private HashMap<String, ArrayList<Object>> m_data;
 	
 	/**
 	 * Initialise function to load data from disk and into memory.
@@ -31,7 +34,13 @@ public class DataInterface {
 	 */
 	public void init()
 	{
-		data = serialiser.getData();
+		this.m_data = serialiser.getData();
+	}
+
+	
+	public void addContact(ContactImpl contact)
+	{
+		m_data.get("contacts").add(contact);
 	}
 	
 	/**
