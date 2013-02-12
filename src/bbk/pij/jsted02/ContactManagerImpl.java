@@ -185,7 +185,7 @@ public class ContactManagerImpl implements ContactManager {
 		boolean running = true;
 		do
 		{
-			running = ui.userInput();
+			running = ui.mainMenu();
 		} while(running);
 	}
 	
