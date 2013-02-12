@@ -1,9 +1,12 @@
 /**
- * 
+ * ContactImpl class - concrete class for Contact object, contains name and
+ *  notes for contacts in the contact management system.
  */
 package bbk.pij.jsted02;
 
 import java.util.ArrayList;
+import java.util.List;
+
 import bbk.pij.jsted02.interfaces.Contact;
 
 /**
@@ -11,22 +14,24 @@ import bbk.pij.jsted02.interfaces.Contact;
  */
 public class ContactImpl implements Contact {
 
+	/**
+	 * Static ID increments when each Contact is created.
+	 */
 	private static int m_id = 0;
-	private ArrayList<String> m_notes;
+	/**
+	 * List of notes associated with Contact.
+	 */
+	private List<String> m_notes = new ArrayList<String>();
+	/**
+	 * Name of contact.
+	 */
 	private String m_name;
 	
 	public ContactImpl()
 	{
 		
 	}
-	
-	public ContactImpl(String name, String notes)
-	{
-		++ContactImpl.m_id;
-		this.m_name = name;
-		this.m_notes = new ArrayList<String>();
-		this.m_notes.add(notes);
-	}
+
 	
 	/* (non-Javadoc)
 	 * @see bbk.pij.jsted02.interfaces.Contact#getId()
@@ -35,23 +40,40 @@ public class ContactImpl implements Contact {
 	public int getId() {
 		return ContactImpl.m_id;
 	}
-
+	
 	/* (non-Javadoc)
 	 * @see bbk.pij.jsted02.interfaces.Contact#getName()
 	 */
 	@Override
-	public String getName() {
+	public String getName()
+	{
 		 return this.m_name;
 	}
 
+	/**
+	 * Sets the name of the contact
+	 * 
+	 * @param name Name of Contact
+	 * 
+	 * @return null
+	 */
+	public void setName(String name)
+	{
+		this.m_name = name;
+	}
+	
 	/* (non-Javadoc)
 	 * @see bbk.pij.jsted02.interfaces.Contact#getNotes()
 	 */
 	@Override
-	public String getNotes() {
+	public String getNotes()
+	{
+		// Create string builder object, iterate over notes and create string
+		//  with newline separating the notes
 		StringBuilder sb = new StringBuilder();
 		for(int i = 0; i < this.m_notes.size();++i)
 			sb.append(this.m_notes.get(i) + "\n");
+		// Return string of notes.
 		return sb.toString();
 	}
 
@@ -59,7 +81,9 @@ public class ContactImpl implements Contact {
 	 * @see bbk.pij.jsted02.interfaces.Contact#addNotes(java.lang.String)
 	 */
 	@Override
-	public void addNotes(String note) {
+	public void addNotes(String note)
+	{
+		// Append note to list.
 		this.m_notes.add(note);
 	}
 

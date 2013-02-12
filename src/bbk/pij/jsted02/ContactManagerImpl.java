@@ -128,7 +128,11 @@ public class ContactManagerImpl implements ContactManager {
 	 */
 	@Override
 	public void addNewContact(String name, String notes) {
-		ContactImpl contact = new ContactImpl(name, notes);
+		// Create contact, set name and notes and add contact to the
+		//  data interface
+		ContactImpl contact = new ContactImpl();
+		contact.setName(name);
+		contact.addNotes(notes);
 		m_dataInterface.addContact(contact);
 	}
 
