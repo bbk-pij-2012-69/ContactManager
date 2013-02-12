@@ -25,7 +25,7 @@ public class ContactManagerImpl implements ContactManager {
 	 * initialised flag is set to true once the system has initialised and is
 	 * ready to be used.
 	 */
-	private boolean initialised = false;
+	private boolean m_initialised = false;
 	/**
 	 * DataInterface variable, this will provide the data used in the system.
 	 */
@@ -45,7 +45,8 @@ public class ContactManagerImpl implements ContactManager {
 	 * @see bbk.pij.jsted02.interfaces.ContactManager#addFutureMeeting(java.util.Set, java.util.Calendar)
 	 */
 	@Override
-	public int addFutureMeeting(Set<Contact> contacts, Calendar date) {
+	public int addFutureMeeting(Set<Contact> contacts, Calendar date)
+	{
 		// TODO Implement functionality
 		return 0;
 	}
@@ -54,7 +55,8 @@ public class ContactManagerImpl implements ContactManager {
 	 * @see bbk.pij.jsted02.interfaces.ContactManager#getPastMeeting(int)
 	 */
 	@Override
-	public PastMeeting getPastMeeting(int id) {
+	public PastMeeting getPastMeeting(int id)
+	{
 		// TODO Implement functionality
 		return null;
 	}
@@ -63,7 +65,8 @@ public class ContactManagerImpl implements ContactManager {
 	 * @see bbk.pij.jsted02.interfaces.ContactManager#getFutureMeeting(int)
 	 */
 	@Override
-	public FutureMeeting getFutureMeeting(int id) {
+	public FutureMeeting getFutureMeeting(int id)
+	{
 		// TODO Implement functionality
 		return null;
 	}
@@ -72,7 +75,8 @@ public class ContactManagerImpl implements ContactManager {
 	 * @see bbk.pij.jsted02.interfaces.ContactManager#getMeeting(int)
 	 */
 	@Override
-	public Meeting getMeeting(int id) {
+	public Meeting getMeeting(int id)
+	{
 		// TODO Implement functionality
 		return null;
 	}
@@ -81,7 +85,8 @@ public class ContactManagerImpl implements ContactManager {
 	 * @see bbk.pij.jsted02.interfaces.ContactManager#getFutureMeetingList(bbk.pij.jsted02.interfaces.Contact)
 	 */
 	@Override
-	public List<Meeting> getFutureMeetingList(Contact contact) {
+	public List<Meeting> getFutureMeetingList(Contact contact)
+	{
 		// TODO Implement functionality
 		return null;
 	}
@@ -90,7 +95,8 @@ public class ContactManagerImpl implements ContactManager {
 	 * @see bbk.pij.jsted02.interfaces.ContactManager#getFutureMeetingList(java.util.Calendar)
 	 */
 	@Override
-	public List<Meeting> getFutureMeetingList(Calendar date) {
+	public List<Meeting> getFutureMeetingList(Calendar date)
+	{
 		// TODO Implement functionality
 		return null;
 	}
@@ -99,7 +105,8 @@ public class ContactManagerImpl implements ContactManager {
 	 * @see bbk.pij.jsted02.interfaces.ContactManager#getPastMeetingList(bbk.pij.jsted02.interfaces.Contact)
 	 */
 	@Override
-	public List<PastMeeting> getPastMeetingList(Contact contact) {
+	public List<PastMeeting> getPastMeetingList(Contact contact)
+	{
 		// TODO Implement functionality
 		return null;
 	}
@@ -109,7 +116,8 @@ public class ContactManagerImpl implements ContactManager {
 	 */
 	@Override
 	public void addNewPastMeeting(Set<Contact> contacts, Calendar date,
-			String text) {
+			String text)
+	{
 		// TODO Implement functionality
 
 	}
@@ -118,7 +126,8 @@ public class ContactManagerImpl implements ContactManager {
 	 * @see bbk.pij.jsted02.interfaces.ContactManager#addMeetingNotes(int, java.lang.String)
 	 */
 	@Override
-	public void addMeetingNotes(int id, String text) {
+	public void addMeetingNotes(int id, String text)
+	{
 		// TODO Implement functionality
 
 	}
@@ -141,7 +150,8 @@ public class ContactManagerImpl implements ContactManager {
 	 */
 	@SuppressWarnings("unchecked")
 	@Override
-	public Set<Contact> getContacts(int... ids) {
+	public Set<Contact> getContacts(int... ids)
+	{
 		return new HashSet<Contact>((Collection<? extends Contact>) this.m_dataInterface.getContacts());
 	}
 
@@ -149,7 +159,8 @@ public class ContactManagerImpl implements ContactManager {
 	 * @see bbk.pij.jsted02.interfaces.ContactManager#getContacts(java.lang.String)
 	 */
 	@Override
-	public Set<Contact> getContacts(String name) {
+	public Set<Contact> getContacts(String name)
+	{
 		// TODO Implement functionality
 		return null;
 	}
@@ -169,6 +180,7 @@ public class ContactManagerImpl implements ContactManager {
 	 */
 	private void launch()
 	{
+		// Create user interface object and 
 		UserInterface ui = new UserInterface(this);
 		boolean running = true;
 		do
@@ -188,7 +200,7 @@ public class ContactManagerImpl implements ContactManager {
 		// Load data for the data interface object
 		//dataInterface.init();
 		//TODO If an exception occurred previously, would we find a corrupted contacts.txt file?
-		this.initialised = true;
+		this.m_initialised = true;
 	}
 	
 	/**
@@ -203,7 +215,7 @@ public class ContactManagerImpl implements ContactManager {
 		// Flush data to disk
 		this.flush();
 		//TODO If an exception occurs, should we save the data that has been edited during the session?
-		this.initialised = false;
+		this.m_initialised = false;
 	}
 	
 	/**
@@ -217,13 +229,13 @@ public class ContactManagerImpl implements ContactManager {
 		// and launch the system.
 		ContactManagerImpl cmApp = new ContactManagerImpl();
 		
-		if(cmApp.initialised)
+		if(cmApp.m_initialised)
 		{
 			cmApp.launch();
 		}
 		
 		// Only run the finalise code if we are initialised.
-		if(cmApp.initialised)
+		if(cmApp.m_initialised)
 		{
 			cmApp.finalise();
 		}

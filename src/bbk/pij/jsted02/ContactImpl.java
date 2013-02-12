@@ -17,7 +17,7 @@ public class ContactImpl implements Contact {
 	/**
 	 * Static ID increments when each Contact is created.
 	 */
-	private static int m_id = 0;
+	private static int contact_count = 0;
 	/**
 	 * List of notes associated with Contact.
 	 */
@@ -27,18 +27,24 @@ public class ContactImpl implements Contact {
 	 */
 	private String m_name;
 	
+	/**
+	 * Set the instance id to the value of the incremental count
+	 */
+	private int m_id = ContactImpl.contact_count++;
+	
+	/**
+	 * Empty constructor for serialisation
+	 */
 	public ContactImpl()
 	{
-		
 	}
 
-	
 	/* (non-Javadoc)
 	 * @see bbk.pij.jsted02.interfaces.Contact#getId()
 	 */
 	@Override
 	public int getId() {
-		return ContactImpl.m_id;
+		return this.m_id;
 	}
 	
 	/* (non-Javadoc)

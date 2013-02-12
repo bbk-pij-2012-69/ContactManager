@@ -47,6 +47,7 @@ public class DataInterface {
 	
 	public void addContact(ContactImpl contact)
 	{
+		
 		m_data.get(DataType.CONTACT).add(contact);
 	}
 	
