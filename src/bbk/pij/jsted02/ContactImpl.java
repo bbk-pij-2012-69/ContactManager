@@ -15,13 +15,17 @@ public class ContactImpl implements Contact {
 	private ArrayList<String> m_notes;
 	private String m_name;
 	
+	public ContactImpl()
+	{
+		
+	}
+	
 	public ContactImpl(String name, String notes)
 	{
 		++ContactImpl.m_id;
 		this.m_name = name;
 		this.m_notes = new ArrayList<String>();
 		this.m_notes.add(notes);
-		System.out.println(this.getId());
 	}
 	
 	/* (non-Javadoc)

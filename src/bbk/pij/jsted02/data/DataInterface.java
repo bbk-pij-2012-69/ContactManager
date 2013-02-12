@@ -15,32 +15,39 @@ import bbk.pij.jsted02.ContactImpl;
  * @author Luke Stedman (jsted02), MSc CS Yr1 2012/13
  */
 public class DataInterface {
+	public enum DataType
+	{
+		MEETING,
+		CONTACT;
+	}
+	
+	
 	/**
 	 * Filename to use to load and store data to and from disk.
 	 */
 	public final String fileName = "contacts.txt";
 	
 	/**
-	 * Serialiser object which will be used to load and save data to/from disk.
+	 * Serialise object which will be used to load and save data to/from disk.
 	 */
 	private DataSerialiser serialiser = new DataSerialiser(fileName);
 
-	private HashMap<String, ArrayList<Object>> m_data;
+	private HashMap<DataType, ArrayList<Object>> m_data;
 	
-	/**
-	 * Initialise function to load data from disk and into memory.
-	 * 
-	 * @return null
-	 */
-	public void init()
+	public DataInterface()
 	{
 		this.m_data = serialiser.getData();
 	}
 
+	public ArrayList<Object> getContacts()
+	{
+		return this.m_data.get(DataType.CONTACT);
+	}
+	
 	
 	public void addContact(ContactImpl contact)
 	{
-		m_data.get("contacts").add(contact);
+		m_data.get(DataType.CONTACT).add(contact);
 	}
 	
 	/**
@@ -50,6 +57,6 @@ public class DataInterface {
 	 */
 	public void flush()
 	{
-		//serialiser.flush(this);
+		serialiser.flush(this.m_data);
 	}
 }

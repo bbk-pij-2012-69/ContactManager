@@ -5,7 +5,9 @@
 package bbk.pij.jsted02.data;
 
 import java.beans.XMLDecoder;
+import java.beans.XMLEncoder;
 import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -15,6 +17,8 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashMap;
+
+import bbk.pij.jsted02.data.DataInterface.DataType;
 
 /**
  * @author Luke Stedman (jsted02), MSc CS Yr1 2012/13
@@ -37,12 +41,12 @@ public class DataSerialiser {
 	private boolean m_loaded = false;
 
 	/**
-	 * Data that is sent back to the interface.
+	 * Data that is used within the system, loaded from disk.
 	 */
-	HashMap<String, ArrayList<Object>> m_data;
+	HashMap<DataType, ArrayList<Object>> m_data = new HashMap<DataType, ArrayList<Object>>();
 
 	/**
-	 * File object, instance variable to stop reduntant repetition of code.
+	 * File object, instance variable to stop redundant repetition of code.
 	 */
 
 	File m_file;
@@ -55,12 +59,18 @@ public class DataSerialiser {
 	 */
 	public DataSerialiser(String fileName)
 	{
-
-
 		// Set the filename and infer the file object path from the provided
 		//  filename.
 		this.m_fileName = fileName;
 		this.m_file = new File(Paths.get(".", this.m_folderName, this.m_fileName).toString());
+
+		// Initialise the data object (this will be written to file the first 
+		//  time the process is ran).
+		for(DataType dt : DataType.values())
+		{
+			
+			m_data.put(dt, new ArrayList<Object>());
+		}
 
 		// Get an output file object.
 		try
@@ -89,7 +99,6 @@ public class DataSerialiser {
 	 */
 	private void verifyFile() throws IOException, FileNotFoundException
 	{
-
 		// If the file does not exist we need to create them.
 		if(!this.m_file.exists())
 		{
@@ -100,6 +109,7 @@ public class DataSerialiser {
 
 			// Creates file
 			this.m_file.createNewFile();
+			this.flush(this.m_data);
 		}
 	}
 
@@ -112,26 +122,36 @@ public class DataSerialiser {
 	 * @return BufferedInputStream handle to file.
 	 * @throws FileNotFoundException 
 	 */
-	
 	private BufferedInputStream getInputStream() throws FileNotFoundException
 	{
+		this.createTmpfile();
+		return new BufferedInputStream(new FileInputStream(this.m_file));
+	}
+
+	private BufferedOutputStream getoutputStream() throws FileNotFoundException
+	{
+		this.createTmpfile();
+		return new BufferedOutputStream(new FileOutputStream(this.m_file));
+	}
+
+	private void createTmpfile()
+	{
+		
+
 		// Create tmp file path
 		File tmpFile = new File(this.m_file.getAbsoluteFile() + ".tmp");
-		
+
 		// Copy the existing file to the new file
 		try
 		{
-			Files.copy(Paths.get(this.m_file.toURI()), Paths.get(tmpFile.toURI()));
+			Files.copy(Paths.get(this.m_file.toURI()), Paths.get(tmpFile.toURI()), java.nio.file.StandardCopyOption.REPLACE_EXISTING );
 		}
 		catch (IOException e)
 		{
 			//TODO - handle exception, what is the most graceful way?
 		}
-		
-		// Open FileInputStream and return it.
-		return new BufferedInputStream(new FileInputStream(this.m_file));
 	}
-	
+
 	/**
 	 * loadData function, used to load the data from the FileStream and into
 	 *  memory for use by the system.
@@ -140,6 +160,7 @@ public class DataSerialiser {
 	 * 
 	 * @param null
 	 */
+	@SuppressWarnings("unchecked")
 	private boolean loadData()
 	{
 		// Create xmlDecoder object and try to load data from the file 
@@ -147,20 +168,12 @@ public class DataSerialiser {
 		try
 		{
 			xmlDecoder = new XMLDecoder(this.getInputStream());
-			this.m_data = (HashMap<String, ArrayList<Object>>)xmlDecoder.readObject();
+			this.m_data = (HashMap<DataType, ArrayList<Object>>)xmlDecoder.readObject();
 
 			if(!this.m_data.isEmpty())
 			{
 				this.m_loaded = true;
 			}
-		}
-		catch (ArrayIndexOutOfBoundsException e)
-		{
-			// We assume that if this error is thrown the file was empty and 
-			//  need to initialise the data set before returning it.
-			this.m_data = new HashMap<String, ArrayList<Object>>();
-			this.m_data.put("contacts", new ArrayList<Object>());
-			this.m_loaded = true;
 		}
 		catch (FileNotFoundException e)
 		{
@@ -180,7 +193,7 @@ public class DataSerialiser {
 	 * 
 	 * @param null
 	 */
-	public HashMap<String, ArrayList<Object>> getData()
+	public HashMap<DataType, ArrayList<Object>> getData()
 	{
 		return this.m_data;
 	}
@@ -189,12 +202,26 @@ public class DataSerialiser {
 	 * flush function, saves data to disk for reading in at a later date.
 	 * 
 	 * @return null
-	 * 
-	 * @param Data to flush to disk.
+	 *
+	 * @param null
 	 */
-	public void flush(Object data)
+	public void flush(HashMap<DataType, ArrayList<Object>> data)
 	{
-
+		// Create xmlEncoder object and save data to disk. 
+		XMLEncoder xmlEncoder= null;
+		try
+		{
+			xmlEncoder = new XMLEncoder(this.getoutputStream());
+			xmlEncoder.writeObject(data);
+		}
+		catch (FileNotFoundException e)
+		{
+			//TODO - handle exception
+		}
+		finally
+		{
+			xmlEncoder.close();
+		}
 	}
 
 }

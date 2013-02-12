@@ -9,7 +9,10 @@ package bbk.pij.jsted02.ui;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+
+import bbk.pij.jsted02.ContactImpl;
 import bbk.pij.jsted02.ContactManagerImpl;
+import bbk.pij.jsted02.interfaces.Contact;
 
 /**
  * @author Luke Stedman (jsted02), MSc CS Yr1 2012/13
@@ -30,7 +33,7 @@ public class UserInterface {
 	 * Member string Array containing options for user interface, blank member 
 	 *  to ensure options and numbers are consistant with each other.
 	 */
-	private String[] m_options = {"", "Add New Contact", EXIT};
+	private String[] m_options = {"", "Add New Contact", "Print Contacts", EXIT};
 
 	/**
 	 * UserInterface class - contains logic to interact with the user.
@@ -91,7 +94,27 @@ public class UserInterface {
 		// Add contact to the contact manager.
 		m_cmApp.addNewContact(name, notes);
 	}
+	
+	/**
+	 * Method to print the Contact Add Menu, options are read from the user and
+	 *  the method then called on the ContactManagerImpl object.
+	 * @throws IOException
+	 */
+	private void printContactMenu() throws IOException
+	{
 
+		// Open new buffer read, print menu screen and read input.
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+
+		System.out.println("");
+		System.out.println("---Print Contact Menu---");
+		System.out.println("");
+
+		for(Contact c : this.m_cmApp.getContacts(1))
+		{
+			System.out.println(c.getName());
+		}
+	}
 	/**
 	 * Method to handle user on main Menu input
 	 * 
@@ -123,6 +146,9 @@ public class UserInterface {
 			{
 			case 1:
 				this.addContactMenu();
+				break;
+			case 2:
+				this.printContactMenu();
 				break;
 			default:
 				System.out.println("Unknown option, please try again...");

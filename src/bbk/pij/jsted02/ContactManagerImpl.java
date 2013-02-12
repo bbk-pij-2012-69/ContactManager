@@ -3,9 +3,9 @@
  */
 package bbk.pij.jsted02;
 
-import java.lang.reflect.Method;
-import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -135,10 +135,10 @@ public class ContactManagerImpl implements ContactManager {
 	/**
 	 * @see bbk.pij.jsted02.interfaces.ContactManager#getContacts(int[])
 	 */
+	@SuppressWarnings("unchecked")
 	@Override
 	public Set<Contact> getContacts(int... ids) {
-		// TODO Implement functionality
-		return null;
+		return new HashSet<Contact>((Collection<? extends Contact>) this.m_dataInterface.getContacts());
 	}
 
 	/**
@@ -167,7 +167,8 @@ public class ContactManagerImpl implements ContactManager {
 	{
 		UserInterface ui = new UserInterface(this);
 		boolean running = true;
-		do{
+		do
+		{
 			running = ui.userInput();
 		} while(running);
 	}
