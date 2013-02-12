@@ -97,6 +97,52 @@ public class DataInterface {
 	}
 
 	/**
+	 * Get contacts method that returns a list of contacts based on the input
+	 *  name.
+	 * 
+	 * @param names String names of contacts to return.
+	 * @return List of Contacts.
+	 */
+	public List<ContactImpl> getContacts(String... names)
+	{
+		// Create an empty list of contacts.
+		List<ContactImpl> returnedContacts = new ArrayList<ContactImpl>();
+		
+		// Loop over each id, search for it in the contact store.
+		for(int i = 0; i < names.length;++i)
+		{
+			ContactImpl contact = this.getContact(names[i]);
+			// If the contact is present append to the list.
+			if(contact != null)
+			{
+				returnedContacts.add(this.getContact(names[i]));
+			}
+		}
+		// Return list
+		return returnedContacts;
+	}
+	
+	/**
+	 * Get contact method, returns the contact if it matches the name of a
+	 *  contact in the data store, otherwise returns null.
+	 *  
+	 * @param name String name of the contact to find.
+	 * @return Contact object if present, null if not present.
+	 */
+	private ContactImpl getContact(String name)
+	{
+		// Loop over each contact in the data store.
+		for(int i = 0; i < this.m_data.get(DataType.CONTACT).size(); ++i)
+		{
+			// If the contact's id matches the provided id, return it.
+			if(((ContactImpl)this.m_data.get(DataType.CONTACT).get(i)).getName() == name)
+				return (ContactImpl)this.m_data.get(DataType.CONTACT).get(i);
+		}
+		// Return null if not present.
+		return null;
+	}
+
+	/**
 	 * Add Contact method, adds a contact to the data interface.
 	 * 
 	 * @param contact Contact to add.

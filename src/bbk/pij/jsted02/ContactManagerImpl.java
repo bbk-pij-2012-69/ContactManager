@@ -160,8 +160,7 @@ public class ContactManagerImpl implements ContactManager {
 	@Override
 	public Set<Contact> getContacts(String name)
 	{
-		// TODO Implement functionality
-		return null;
+		return new HashSet<Contact>((Collection<? extends Contact>) this.m_dataInterface.getContacts(name));
 	}
 
 	/**
