@@ -148,11 +148,10 @@ public class ContactManagerImpl implements ContactManager {
 	/**
 	 * @see bbk.pij.jsted02.interfaces.ContactManager#getContacts(int[])
 	 */
-	@SuppressWarnings("unchecked")
 	@Override
 	public Set<Contact> getContacts(int... ids)
 	{
-		return new HashSet<Contact>((Collection<? extends Contact>) this.m_dataInterface.getContacts());
+		return new HashSet<Contact>((Collection<? extends Contact>) this.m_dataInterface.getContacts(ids));
 	}
 
 	/**

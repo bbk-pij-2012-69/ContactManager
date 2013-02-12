@@ -84,8 +84,6 @@ public class UserInterface {
 	 * 
 	 * @param menuName Name of menu to print in header.
 	 * @param options Array of Menu Options to print.
-	 * 
-	 * @return null
 	 */
 	private void printMenu(String menuName, MenuOption[] options)
 	{

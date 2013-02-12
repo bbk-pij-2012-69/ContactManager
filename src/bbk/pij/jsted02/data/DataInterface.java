@@ -8,6 +8,7 @@ package bbk.pij.jsted02.data;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import bbk.pij.jsted02.ContactImpl;
 
@@ -25,39 +26,91 @@ public class DataInterface {
 	/**
 	 * Filename to use to load and store data to and from disk.
 	 */
-	public final String fileName = "contacts.txt";
+	public final String FILE_NAME = "contacts.txt";
 	
 	/**
-	 * Serialise object which will be used to load and save data to/from disk.
+	 * Serialiser object which will be used to load and save data to/from disk.
 	 */
-	private DataSerialiser serialiser = new DataSerialiser(fileName);
+	private DataSerialiser m_serialiser = new DataSerialiser(FILE_NAME);
 
+	/**
+	 * Data store, hash containing enum reference to data and array list of
+	 *  data objects.
+	 */
 	private HashMap<DataType, ArrayList<Object>> m_data;
 	
+	/**
+	 * Constructs DataInterface, gets the data from the serialiser and stores
+	 *  it for use by the ContactManager. 
+	 */
 	public DataInterface()
 	{
-		this.m_data = serialiser.getData();
+		this.m_data = m_serialiser.getData();
 	}
 
-	public ArrayList<Object> getContacts()
+	
+	// Contact interfaces to data.
+	/**
+	 * Get contacts method that returns a list of contacts based on the input
+	 *  id's.
+	 * 
+	 * @param ids Integer id's of contacts to return. 
+	 * @return List of Contacts.
+	 */
+	public List<ContactImpl> getContacts(int...ids)
 	{
-		return this.m_data.get(DataType.CONTACT);
+		// Create an empty list of contacts.
+		List<ContactImpl> returnedContacts = new ArrayList<ContactImpl>();
+		
+		// Loop over each id, search for it in the contact store.
+		for(int i = 0; i < ids.length;++i)
+		{
+			ContactImpl contact = this.getContact(ids[i]);
+			// If the contact is present append to the list.
+			if(contact != null)
+			{
+				returnedContacts.add(this.getContact(ids[i]));
+			}
+		}
+		// Return list
+		return returnedContacts;
 	}
 	
-	
+	/**
+	 * Get contact method, returns the contact if it matches the id of a
+	 *  contact in the data store, otherwise returns null.
+	 *  
+	 * @param id Integer id of contact to find.
+	 * @return Contact object if present, null if not present.
+	 */
+	private ContactImpl getContact(int id)
+	{
+		// Loop over each contact in the data store.
+		for(int i = 0; i < this.m_data.get(DataType.CONTACT).size(); ++i)
+		{
+			// If the contact's id matches the provided id, return it.
+			if(((ContactImpl)this.m_data.get(DataType.CONTACT).get(i)).getId() == id)
+				return (ContactImpl)this.m_data.get(DataType.CONTACT).get(i);
+		}
+		// Return null if not present.
+		return null;
+	}
+
+	/**
+	 * Add Contact method, adds a contact to the data interface.
+	 * 
+	 * @param contact Contact to add.
+	 */
 	public void addContact(ContactImpl contact)
 	{
-		
 		m_data.get(DataType.CONTACT).add(contact);
 	}
 	
 	/**
 	 * Flush function to save data to disk safely.
-	 * 
-	 * @return null
 	 */
 	public void flush()
 	{
-		serialiser.flush(this.m_data);
+		m_serialiser.flush(this.m_data);
 	}
 }
