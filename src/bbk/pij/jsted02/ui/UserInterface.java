@@ -6,10 +6,7 @@
 
 package bbk.pij.jsted02.ui;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
-
 import bbk.pij.jsted02.ContactManagerImpl;
 import bbk.pij.jsted02.interfaces.MenuOption;
 import bbk.pij.jsted02.ui.MenuOptions.*;
@@ -119,13 +116,8 @@ public class UserInterface {
 		{
 			// re-initialise to catch subsequent passes in the loop.
 			unknown = false;			
-			System.out.print("Please enter action: ");
-			// Open new buffer and read input
-			BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-			// Parse the selected option to an int and look up the option in
-			//  the provided array.
 			try {
-				MenuOption selectedOption = options[Integer.parseInt(br.readLine())];
+				MenuOption selectedOption = options[Utils.getIntInput("Please enter action: ")];
 				
 				// Check which instance the options are and cast to the enum
 				if(options instanceof MainMenuOption[])
@@ -154,11 +146,11 @@ public class UserInterface {
 					switch((ContactOption)selectedOption)
 					{
 					case ADD_CONTACT:
-						break;
+						ContactsUserInterface.addNewContact(m_cmApp);
 					case GET_CONTACT:
-						break;
+						ContactsUserInterface.getContact(m_cmApp);
 					case UPD_CONTACT:
-						break;
+						ContactsUserInterface.updContact(m_cmApp);
 					case QUIT:
 						break;
 					case EXIT:
