@@ -27,8 +27,8 @@ public class MenuOptions {
 	{
 		NULL(""),
 		ADD_CONTACT("Add a Contact"),
-		GET_CONTACT("Get a Contact"),
-		UPD_CONTACT("Update a Contact"),
+		GET_CONTACT("List Contacts"),
+		UPD_CONTACT("Add a Note to a Contact"),
 		QUIT("Quit to Main Menu"),
 		EXIT("Exit");
 		

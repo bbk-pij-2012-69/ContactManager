@@ -117,7 +117,7 @@ public class UserInterface {
 			// re-initialise to catch subsequent passes in the loop.
 			unknown = false;			
 			try {
-				MenuOption selectedOption = options[Utils.getIntInput("Please enter action: ")];
+				MenuOption selectedOption = options[Utils.getIntInput("Please enter action")];
 				
 				// Check which instance the options are and cast to the enum
 				if(options instanceof MainMenuOption[])
@@ -147,10 +147,13 @@ public class UserInterface {
 					{
 					case ADD_CONTACT:
 						ContactsUserInterface.addNewContact(m_cmApp);
+						break;
 					case GET_CONTACT:
-						ContactsUserInterface.getContact(m_cmApp);
+						ContactsUserInterface.listContacts(m_cmApp);
+						break;
 					case UPD_CONTACT:
 						ContactsUserInterface.updContact(m_cmApp);
+						break;
 					case QUIT:
 						break;
 					case EXIT:
@@ -191,7 +194,8 @@ public class UserInterface {
 			}
 			catch (IOException ioe)
 			{
-				System.out.println("Unknown error trying to get user input.");
+				System.out.println("Error trying to get user input: " + ioe.getMessage());
+				ioe.printStackTrace();
 			}
 			catch (NumberFormatException nfe)
 			{

@@ -27,7 +27,6 @@ public class Utils {
 		// Open new buffer and read input
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		String input = br.readLine();
-		br.close();
 		return input;
 	}
 	
