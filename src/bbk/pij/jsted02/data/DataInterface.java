@@ -22,7 +22,6 @@ public class DataInterface {
 		CONTACT;
 	}
 	
-	
 	/**
 	 * Filename to use to load and store data to and from disk.
 	 */
@@ -131,11 +130,12 @@ public class DataInterface {
 	 */
 	private ContactImpl getContact(String name)
 	{
+		System.out.println(name);
 		// Loop over each contact in the data store.
 		for(int i = 0; i < this.m_data.get(DataType.CONTACT).size(); ++i)
 		{
-			// If the contact's id matches the provided id, return it.
-			if(((ContactImpl)this.m_data.get(DataType.CONTACT).get(i)).getName() == name)
+			// If the contact's name matches the provided name, return it.
+			if(((ContactImpl)this.m_data.get(DataType.CONTACT).get(i)).getName().equals(name))
 				return (ContactImpl)this.m_data.get(DataType.CONTACT).get(i);
 		}
 		// Return null if not present.

@@ -4,9 +4,6 @@
  */
 package bbk.pij.jsted02;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import bbk.pij.jsted02.interfaces.Contact;
 
 /**
@@ -21,17 +18,17 @@ public class ContactImpl implements Contact {
 	/**
 	 * List of notes associated with Contact.
 	 */
-	private List<String> m_notes = new ArrayList<String>();
+	private String m_notes = "";
 	/**
 	 * Name of contact.
 	 */
 	private String m_name;
-	
+
 	/**
 	 * Set the instance id to the value of the incremental count
 	 */
 	private int m_id = ContactImpl.contact_count++;
-	
+
 	/**
 	 * Empty constructor for serialisation
 	 */
@@ -46,14 +43,14 @@ public class ContactImpl implements Contact {
 	public int getId() {
 		return this.m_id;
 	}
-	
+
 	/* (non-Javadoc)
 	 * @see bbk.pij.jsted02.interfaces.Contact#getName()
 	 */
 	@Override
 	public String getName()
 	{
-		 return this.m_name;
+		return this.m_name;
 	}
 
 	/**
@@ -67,6 +64,12 @@ public class ContactImpl implements Contact {
 	{
 		this.m_name = name;
 	}
+
+	public void setId(int id)
+	{
+		this.m_id = id;
+	}
+
 	
 	/* (non-Javadoc)
 	 * @see bbk.pij.jsted02.interfaces.Contact#getNotes()
@@ -74,13 +77,7 @@ public class ContactImpl implements Contact {
 	@Override
 	public String getNotes()
 	{
-		// Create string builder object, iterate over notes and create string
-		//  with newline separating the notes
-		StringBuilder sb = new StringBuilder();
-		for(int i = 0; i < this.m_notes.size();++i)
-			sb.append(this.m_notes.get(i) + "\n");
-		// Return string of notes.
-		return sb.toString();
+		return this.m_notes;
 	}
 
 	/* (non-Javadoc)
@@ -90,7 +87,31 @@ public class ContactImpl implements Contact {
 	public void addNotes(String note)
 	{
 		// Append note to list.
-		this.m_notes.add(note);
+		this.m_notes += "\n" + note;
+	}
+	public void setNotes(String note)
+	{
+		// Append note to list.
+		this.m_notes += "\n" + note;
+	}
+	
+
+	/**
+	 * 
+	 */
+	public String toString()
+	{
+		StringBuilder sb = new StringBuilder();
+		sb.append("ID: " + this.m_id + "\n");
+		sb.append("Name: " + this.m_name + "\n");
+		if(this.m_notes.length() > 0)
+		{
+			sb.append("\n");
+			sb.append("Notes:");
+			sb.append(this.m_notes);
+			sb.append("\n");
+		}
+		return sb.toString();
 	}
 
 }
