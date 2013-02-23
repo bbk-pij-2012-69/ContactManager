@@ -15,13 +15,17 @@ import bbk.pij.jsted02.interfaces.Meeting;
  */
 public class MeetingImpl implements Meeting {
 
+	private Set<Contact> m_contacts;
+	private Calendar m_date;
+	private int m_id;
+	protected String m_notes;
+
 	/* (non-Javadoc)
 	 * @see bbk.pij.jsted02.interfaces.Meeting#getId()
 	 */
 	@Override
 	public int getId() {
-		// TODO Auto-generated method stub
-		return 0;
+		return this.m_id;
 	}
 
 	/* (non-Javadoc)
@@ -29,8 +33,7 @@ public class MeetingImpl implements Meeting {
 	 */
 	@Override
 	public Calendar getDate() {
-		// TODO Auto-generated method stub
-		return null;
+		return this.m_date;
 	}
 
 	/* (non-Javadoc)
@@ -38,8 +41,24 @@ public class MeetingImpl implements Meeting {
 	 */
 	@Override
 	public Set<Contact> getContacts() {
-		// TODO Auto-generated method stub
-		return null;
+		return this.m_contacts;
 	}
 
+	public void setContacts(Set<Contact> contacts)
+	{
+		this.m_contacts = contacts;
+	}
+	
+	public void setDate(Calendar date) {
+		this.m_date = date;
+	}
+
+	public void setNotes(String notes) {
+		this.m_notes = notes;
+	}
+
+	public void appendNote(String notes) {
+		this.m_notes += "\n" + notes;
+	}
+	
 }
