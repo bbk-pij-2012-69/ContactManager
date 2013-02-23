@@ -7,10 +7,15 @@
 package bbk.pij.jsted02.data;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 
 import bbk.pij.jsted02.ContactImpl;
+import bbk.pij.jsted02.interfaces.Contact;
+import bbk.pij.jsted02.interfaces.FutureMeeting;
+import bbk.pij.jsted02.interfaces.Meeting;
+import bbk.pij.jsted02.interfaces.PastMeeting;
 
 /**
  * @author Luke Stedman (jsted02), MSc CS Yr1 2012/13
@@ -151,6 +156,11 @@ public class DataInterface {
 	{
 		m_data.get(DataType.CONTACT).add(contact);
 	}
+
+	public void addMeeting(Meeting meeting)
+	{
+		m_data.get(DataType.MEETING).add(meeting);
+	}
 	
 	/**
 	 * Flush function to save data to disk safely.
@@ -158,5 +168,44 @@ public class DataInterface {
 	public void flush()
 	{
 		m_serialiser.flush(this.m_data);
+	}
+
+
+	public PastMeeting getPastMeeting(int id) {
+		return (PastMeeting)this.getMeeting(id);
+	}
+
+
+	public FutureMeeting getFutureMeeting(int id) {
+		return (FutureMeeting)this.getMeeting(id);
+	}
+
+
+	public Meeting getMeeting(int id) {
+		return null;
+	}
+
+
+
+	public List<Meeting> getFutureMeetingList(Contact contact) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public List<Meeting> getFutureMeetingList(Calendar date) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+
+	public List<PastMeeting> getPastMeetingList(Contact contact) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+
+	public void updMeeting(Meeting meeting) {
+		// TODO Auto-generated method stub
+		
 	}
 }
