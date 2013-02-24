@@ -16,7 +16,7 @@ public class ContactImpl implements Contact {
 	 */
 	private static int contact_count = 0;
 	/**
-	 * List of notes associated with Contact.
+	 * Notes associate with the Contact.
 	 */
 	private String m_notes = "";
 	/**
@@ -40,7 +40,8 @@ public class ContactImpl implements Contact {
 	 * @see bbk.pij.jsted02.interfaces.Contact#getId()
 	 */
 	@Override
-	public int getId() {
+	public int getId()
+	{
 		return this.m_id;
 	}
 
@@ -65,6 +66,11 @@ public class ContactImpl implements Contact {
 		this.m_name = name;
 	}
 
+	/**
+	 * Sets ID of the contact
+	 * 
+	 * @param ID of contact to assign
+	 */
 	public void setId(int id)
 	{
 		this.m_id = id;
@@ -80,6 +86,16 @@ public class ContactImpl implements Contact {
 		return this.m_notes;
 	}
 
+	/**
+	 * Sets Notes about the contact
+	 * 
+	 * @param Note to set
+	 */
+	public void setNotes(String notes)
+	{
+		this.addNotes(notes);
+	}
+	
 	/* (non-Javadoc)
 	 * @see bbk.pij.jsted02.interfaces.Contact#addNotes(java.lang.String)
 	 */
@@ -89,15 +105,11 @@ public class ContactImpl implements Contact {
 		// Append note to list.
 		this.m_notes += "\n" + note;
 	}
-	public void setNotes(String note)
-	{
-		// Append note to list.
-		this.m_notes += "\n" + note;
-	}
-	
 
 	/**
+	 * Prints out information about the contact in a user readable format
 	 * 
+	 * @return Returns string of contact information.
 	 */
 	public String toString()
 	{
