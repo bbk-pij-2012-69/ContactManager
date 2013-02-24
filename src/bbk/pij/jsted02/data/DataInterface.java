@@ -8,10 +8,15 @@ package bbk.pij.jsted02.data;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import bbk.pij.jsted02.ContactImpl;
+import bbk.pij.jsted02.FutureMeetingImpl;
+import bbk.pij.jsted02.MeetingImpl;
 import bbk.pij.jsted02.interfaces.Contact;
 import bbk.pij.jsted02.interfaces.FutureMeeting;
 import bbk.pij.jsted02.interfaces.Meeting;
@@ -104,7 +109,7 @@ public class DataInterface {
 	 * Get contacts method that returns a list of contacts based on the input
 	 *  name.
 	 * 
-	 * @param names String names of contacts to return.
+	 * @param List of strings (names) of contacts to return.
 	 * @return List of Contacts.
 	 */
 	public List<ContactImpl> getContacts(String... names)
@@ -135,7 +140,6 @@ public class DataInterface {
 	 */
 	private ContactImpl getContact(String name)
 	{
-		System.out.println(name);
 		// Loop over each contact in the data store.
 		for(int i = 0; i < this.m_data.get(DataType.CONTACT).size(); ++i)
 		{
@@ -157,6 +161,10 @@ public class DataInterface {
 		m_data.get(DataType.CONTACT).add(contact);
 	}
 
+	/**
+	 * Add Meeting method, adds a meeting to the data interface.
+	 * @param Meeting to add.
+	 */
 	public void addMeeting(Meeting meeting)
 	{
 		m_data.get(DataType.MEETING).add(meeting);
@@ -177,15 +185,35 @@ public class DataInterface {
 
 
 	public FutureMeeting getFutureMeeting(int id) {
-		return (FutureMeeting)this.getMeeting(id);
+		Meeting meeting = this.getMeeting(id);
+		if(! (meeting instanceof FutureMeetingImpl))
+		{
+			return null;
+		}
+		return (FutureMeeting)meeting;
 	}
 
 
 	public Meeting getMeeting(int id) {
+		// Loop over each contact in the data store.
+		for(int i = 0; i < this.m_data.get(DataType.MEETING).size(); ++i)
+		{
+			// If the contact's name matches the provided name, return it.
+			if(((MeetingImpl)this.m_data.get(DataType.MEETING).get(i)).getId() == id)
+				return (MeetingImpl)this.m_data.get(DataType.MEETING).get(i);
+		}
+		// Return null if not present.
 		return null;
 	}
 
+	public ArrayList<Object> getAllMeetings() {
+		return m_data.get(DataType.MEETING);
+	}
 
+	@SuppressWarnings("unchecked")
+	public Set<Contact> getAllContacts(){
+		return new HashSet<Contact>((Collection<? extends Contact>) this.m_data.get(DataType.CONTACT));
+	}
 
 	public List<Meeting> getFutureMeetingList(Contact contact) {
 		// TODO Auto-generated method stub

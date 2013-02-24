@@ -5,6 +5,7 @@
 package bbk.pij.jsted02;
 
 import java.util.Calendar;
+import java.util.HashSet;
 import java.util.Set;
 
 import bbk.pij.jsted02.interfaces.Contact;
@@ -23,7 +24,7 @@ public class MeetingImpl implements Meeting {
 	/**
 	 * List of contacts at the meeting.
 	 */
-	private Set<Contact> m_contacts;
+	private Set<Contact> m_contacts = new HashSet<Contact>();
 
 	/**
 	 * Date of the meeting
@@ -92,7 +93,10 @@ public class MeetingImpl implements Meeting {
 	 */
 	public void setContacts(Set<Contact> contacts)
 	{
-		this.m_contacts = contacts;
+		for(Contact contact : contacts)
+		{
+			this.addContact(contact);
+		}
 	}
 	
 	/**
