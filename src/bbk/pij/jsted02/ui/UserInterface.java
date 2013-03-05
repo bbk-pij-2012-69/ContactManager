@@ -8,8 +8,8 @@ package bbk.pij.jsted02.ui;
 
 import java.io.IOException;
 import bbk.pij.jsted02.ContactManagerImpl;
-import bbk.pij.jsted02.interfaces.MenuOption;
 import bbk.pij.jsted02.ui.MenuOptions.*;
+import bbk.pij.jsted02.ui.interfaces.MenuOption;
 
 /**
  * @author Luke Stedman (jsted02), MSc CS Yr1 2012/13

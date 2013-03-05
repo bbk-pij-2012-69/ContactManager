@@ -1,6 +1,6 @@
 package bbk.pij.jsted02.ui;
 
-import bbk.pij.jsted02.interfaces.MenuOption;
+import bbk.pij.jsted02.ui.interfaces.MenuOption;
 
 public class MenuOptions {
 
