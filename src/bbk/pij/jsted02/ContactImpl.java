@@ -27,13 +27,14 @@ public class ContactImpl implements Contact {
 	/**
 	 * Set the instance id to the value of the incremental count
 	 */
-	private int m_id = ContactImpl.contact_count++;
+	private int m_id;
 
 	/**
 	 * Empty constructor for serialisation
 	 */
 	public ContactImpl()
 	{
+		setId(ContactImpl.contact_count++);
 	}
 
 	/* (non-Javadoc)
@@ -41,7 +42,7 @@ public class ContactImpl implements Contact {
 	 */
 	@Override
 	public int getId() {
-		return this.m_id;
+		return m_id;
 	}
 
 	/* (non-Javadoc)
@@ -50,24 +51,27 @@ public class ContactImpl implements Contact {
 	@Override
 	public String getName()
 	{
-		return this.m_name;
+		return m_name;
 	}
 
 	/**
 	 * Sets the name of the contact
 	 * 
 	 * @param name Name of Contact
-	 * 
-	 * @return null
 	 */
 	public void setName(String name)
 	{
-		this.m_name = name;
+		m_name = name;
 	}
 
-	public void setId(int id)
+	/**
+	 * Sets the id of the contact
+	 * 
+	 * @param integer id of Contact
+	 */
+	private void setId(int id)
 	{
-		this.m_id = id;
+		m_id = id;
 	}
 
 	
@@ -77,7 +81,7 @@ public class ContactImpl implements Contact {
 	@Override
 	public String getNotes()
 	{
-		return this.m_notes;
+		return m_notes;
 	}
 
 	/* (non-Javadoc)
@@ -87,12 +91,19 @@ public class ContactImpl implements Contact {
 	public void addNotes(String note)
 	{
 		// Append note to list.
-		this.m_notes += "\n" + note;
+		if(m_notes.length() != 0)
+			m_notes += "\n";
+		m_notes += note.replace("\n",  "").replace("\r", "");
 	}
+
+	/**
+	 * Public Setter for serialisation
+	 * 
+	 * @param note to be added to the notes string.
+	 */
 	public void setNotes(String note)
 	{
-		// Append note to list.
-		this.m_notes += "\n" + note;
+		addNotes(note);
 	}
 	
 
@@ -102,13 +113,13 @@ public class ContactImpl implements Contact {
 	public String toString()
 	{
 		StringBuilder sb = new StringBuilder();
-		sb.append("ID: " + this.m_id + "\n");
-		sb.append("Name: " + this.m_name + "\n");
-		if(this.m_notes.length() > 0)
+		sb.append("ID: " + m_id + "\n");
+		sb.append("Name: " + m_name + "\n");
+		if(m_notes.length() > 0)
 		{
 			sb.append("\n");
 			sb.append("Notes:");
-			sb.append(this.m_notes);
+			sb.append(m_notes);
 			sb.append("\n");
 		}
 		return sb.toString();
