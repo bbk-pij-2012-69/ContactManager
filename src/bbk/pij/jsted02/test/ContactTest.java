@@ -22,7 +22,7 @@ public class ContactTest {
 	@Before
 	public void setUp()
 	{
-		m_contacts = TestHelper.generateRandomContacts(10, 100);
+		m_contacts = TestHelper.generateContacts(10, 100);
 	}
 
 	/**
