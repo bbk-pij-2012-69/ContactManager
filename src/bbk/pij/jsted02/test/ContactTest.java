@@ -5,8 +5,8 @@ import static org.junit.Assert.*;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.junit.After;
-import org.junit.Before;
+import org.junit.AfterClass;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 import bbk.pij.jsted02.interfaces.Contact;
@@ -14,12 +14,12 @@ import bbk.pij.jsted02.test.utils.*;
 
 public class ContactTest {
 
-	List<Contact> m_contacts;
+	static List<Contact> m_contacts;
 
 	/**
 	 * Initialisation method, sets up a list of contacts to use in the tests.
 	 */
-	@Before
+	@BeforeClass
 	public void setUp()
 	{
 		m_contacts = TestHelper.generateContacts(10, 100);
@@ -28,7 +28,7 @@ public class ContactTest {
 	/**
 	 * Finalise method, tears down anything that does not need to persist.
 	 */
-	@After
+	@AfterClass
 	public void tearDown()
 	{
 	}

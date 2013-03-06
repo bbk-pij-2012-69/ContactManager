@@ -4,28 +4,41 @@ import static org.junit.Assert.*;
 
 import java.util.ArrayList;
 import java.util.List;
-import org.junit.After;
-import org.junit.Before;
+import java.util.Set;
+
+import org.junit.AfterClass;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 import bbk.pij.jsted02.interfaces.Contact;
 import bbk.pij.jsted02.interfaces.Meeting;
+import bbk.pij.jsted02.meetings.MeetingImpl;
 import bbk.pij.jsted02.test.utils.TestHelper;
 
 public class FutureMeetingTest {
 
-	List<Meeting> m_meetings;
-	List<Contact> m_contacts;
-	
-	@Before
-	public void setUp() throws Exception
-	{
-		m_meetings = new ArrayList<Meeting>();
-		m_contacts = TestHelper.generateContacts(m_meetings.size());
-	}
+	static List<MeetingImpl> m_meetings;
+	static List<Contact> m_contacts;
 
-	@After
-	public void tearDown() throws Exception
+	/**
+	 * Initialisation method, sets up a list of contacts and meetings to use in the tests.
+	 */
+	@BeforeClass
+	public static void setUp()
+	{
+		m_meetings = TestHelper.generateFutureMeetings(10, 100);
+		m_contacts = TestHelper.generateContacts(m_meetings.size());
+		for(MeetingImpl meeting : m_meetings)
+		{
+			meeting.setContacts(m_contacts.subList(0, meeting.getId()));
+		}
+	}
+	
+	/**
+	 * Finalise method, tears down anything that does not need to persist.
+	 */
+	@AfterClass
+	public static void tearDown()
 	{
 	}
 
@@ -48,22 +61,42 @@ public class FutureMeetingTest {
 	}
 
 	/**
+	 * checkContacts test, tests that the correct number of contacts are associated with the meeting
+	 */
+	@Test
+	public void checkContactCount()
+	{
+		for(Meeting meeting : m_meetings)
+		{
+			Set<Contact> contacts = meeting.getContacts();
+			int id = meeting.getId();
+			if(id != contacts.size())
+			{
+				fail(id + " does not return the correct number of contacts: " + contacts.size() + " v. " + id);
+			}
+		}
+	}
+	
+
+	/**
 	 * checkContacts test, tests that the correct contacts are associated with the meeting
 	 */
 	@Test
 	public void checkContacts()
 	{
-		List<Integer> ids = new ArrayList<Integer>();
 		for(Meeting meeting : m_meetings)
 		{
-			meeting.getContacts();
+			Set<Contact> contacts = meeting.getContacts();
 			int id = meeting.getId();
-			if(ids.contains(id))
+			for(Contact contact : contacts)
 			{
-				fail(id + " is already present against a meeting");
+				if(id <= contact.getId())
+				{
+					fail(id + " does not contain a correct contact: " + contact.getId() + " v. " + id);
+				}
+				
 			}
-			ids.add(id);
 		}
-	}
+	}	
 
 }

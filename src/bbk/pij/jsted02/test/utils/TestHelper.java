@@ -6,9 +6,9 @@ import java.util.List;
 import java.util.Random;
 
 import bbk.pij.jsted02.ContactImpl;
-import bbk.pij.jsted02.FutureMeetingImpl;
 import bbk.pij.jsted02.interfaces.Contact;
-import bbk.pij.jsted02.interfaces.Meeting;
+import bbk.pij.jsted02.meetings.FutureMeetingImpl;
+import bbk.pij.jsted02.meetings.MeetingImpl;
 
 public class TestHelper {
 	
@@ -71,24 +71,21 @@ public class TestHelper {
 	 * 
 	 * @return List of Meetings between the numbers provided
 	 */
-	public static List<Meeting> generateFutureMeetings(int min, int max)
+	public static List<MeetingImpl> generateFutureMeetings(int min, int max)
 	{
-		List<Meeting> Meeting = new ArrayList<Meeting>();
+		List<MeetingImpl> meetings = new ArrayList<MeetingImpl>();
 		Calendar cal = Calendar.getInstance();
 		
 		for(int i = 0; i < generateRandomNum(min, max); ++i)
 		{
 			FutureMeetingImpl meeting = new FutureMeetingImpl();
-			int id = meeting.getId();
-			
 			meeting.setDate(cal);
-			meeting.setContacts(generateContacts(id));
-			Meeting.add(meeting);
+			meetings.add(meeting);
 			
 			// Increment the day by 1
 			cal.add(Calendar.DATE, 1);
 		}
 		
-		return Meeting;
+		return meetings;
 	}
 }
