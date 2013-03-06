@@ -1,7 +1,7 @@
 /**
  * 
  */
-package bbk.pij.jsted02;
+package bbk.pij.jsted02.meetings;
 
 import java.util.Calendar;
 import java.util.HashSet;

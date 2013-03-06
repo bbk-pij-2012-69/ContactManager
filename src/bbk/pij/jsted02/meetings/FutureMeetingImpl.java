@@ -1,7 +1,7 @@
 /**
  * 
  */
-package bbk.pij.jsted02;
+package bbk.pij.jsted02.meetings;
 
 import bbk.pij.jsted02.interfaces.FutureMeeting;
 
