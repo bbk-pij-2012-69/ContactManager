@@ -4,18 +4,17 @@ import static org.junit.Assert.*;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import bbk.pij.jsted02.ContactImpl;
 import bbk.pij.jsted02.interfaces.Contact;
+import bbk.pij.jsted02.test.utils.*;
 
 public class ContactTest {
 
-	List<ContactImpl> m_contacts;
+	List<Contact> m_contacts;
 
 	/**
 	 * Initialisation method, sets up a list of contacts to use in the tests.
@@ -23,22 +22,7 @@ public class ContactTest {
 	@Before
 	public void setUp()
 	{
-		Random rand = new Random();
-		int min = 10;
-		int max = 100;
-		int random = rand.nextInt(max - min + 1) + min;
-		m_contacts = new ArrayList<ContactImpl>();
-		for(int i = 0; i < random; ++i)
-		{
-			ContactImpl contact = new ContactImpl();
-			int id = contact.getId();
-			contact.setName(id + "_name");
-			if(id % 2 == 0)
-			{
-				contact.setNotes(id + "_note");
-			}
-			m_contacts.add(contact);
-		}
+		m_contacts = TestHelper.generateRandomContacts(10, 100);
 	}
 
 	/**
