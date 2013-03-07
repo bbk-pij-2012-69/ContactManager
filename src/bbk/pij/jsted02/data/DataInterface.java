@@ -25,7 +25,7 @@ public class DataInterface {
 	/**
 	 * Filename to use to load and store data to and from disk.
 	 */
-	public final String FILE_NAME = "contacts.txt";
+	public final String FILE_NAME = "contacts.tst";
 	
 	/**
 	 * Serialiser object which will be used to load and save data to/from disk.

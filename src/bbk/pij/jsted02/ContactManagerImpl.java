@@ -172,22 +172,6 @@ public class ContactManagerImpl implements ContactManager {
 	}
 	
 	/**
-	 * Launch function for Contact Manager, runs the main loop for interacting with system.
-	 * 
-	 * @return null
-	 */
-	private void launch()
-	{
-		// Create user interface object and 
-		UserInterface ui = new UserInterface(this);
-		boolean running = true;
-		do
-		{
-			running = ui.mainMenu();
-		} while(running);
-	}
-	
-	/**
 	 * Initialise function, will load contacts data into memory and prepare
 	 *  system for use.
 	 *  
@@ -206,37 +190,22 @@ public class ContactManagerImpl implements ContactManager {
 	 *  everything is ok to shutdown the system.
 	 *  
 	 *  @return null
+	 * @throws Throwable 
 	 */
-	private void finalise()
+	@Override
+	protected void finalize() throws Throwable
 	{
+		System.out.println("It's the final countdown...");
 		//TODO Clean-up system.
 		// Flush data to disk
 		this.flush();
 		//TODO If an exception occurs, should we save the data that has been edited during the session?
 		this.m_initialised = false;
+		super.finalize();
 	}
-	
-	/**
-	 * main Java function - entry point to program
-	 * 
-	 * @return null
-	 */
-	public static void main(String [] args){
-		
-		// Create ContactManagerImpl object, check the system is initialised
-		// and launch the system.
-		ContactManagerImpl cmApp = new ContactManagerImpl();
-		
-		if(cmApp.m_initialised)
-		{
-			cmApp.launch();
-		}
-		
-		// Only run the finalise code if we are initialised.
-		if(cmApp.m_initialised)
-		{
-			cmApp.finalise();
-		}
+
+	public boolean getInitialised() {
+		return m_initialised;
 	}
 
 }
