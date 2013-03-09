@@ -50,21 +50,38 @@ public class ContactManagerImpl implements ContactManager {
 		this.init(test);
 	}
 	
+	private int[] getContactIds(Set<Contact> contacts)
+	{
+		int count = 0;
+		int[] ids = new int[contacts.size()];
+		for(Contact contact : contacts)
+		{
+			ids[count++] = contact.getId();
+		}
+		return ids;
+	}
+	
 	/**
 	 * @see bbk.pij.jsted02.interfaces.ContactManager#addFutureMeeting(java.util.Set, java.util.Calendar)
 	 */
 	@Override
 	public int addFutureMeeting(Set<Contact> contacts, Calendar date)
 	{
-		if (date.compareTo(Calendar.getInstance()) > 0)
+		Set<Contact> foundContacts = getContacts(getContactIds(contacts));
+		if(contacts.size() != foundContacts.size())
 		{
-			FutureMeetingImpl meeting = new FutureMeetingImpl();
-			meeting.setDate(date);
-			meeting.setContacts(contacts);
-			m_dataInterface.addMeeting(meeting);
-			return meeting.getId();
+			throw new IllegalArgumentException("Invalid contact - a contact supplied is not known.");
 		}
-		return -1;
+		else if (date.compareTo(Calendar.getInstance()) <= 0)
+		{
+			throw new IllegalArgumentException("Invalid date - must be in the future.");
+		}
+		
+		FutureMeetingImpl meeting = new FutureMeetingImpl();
+		meeting.setDate(date);
+		meeting.setContacts(contacts);
+		m_dataInterface.addMeeting(meeting);
+		return meeting.getId();
 	}
 
 	/**

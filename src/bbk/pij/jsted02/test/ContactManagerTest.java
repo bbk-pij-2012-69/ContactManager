@@ -61,9 +61,7 @@ public class ContactManagerTest {
 		int meeting_id = m_cmApp.addFutureMeeting(contacts, m_date);
 		
 		assertFalse(m_cmApp.getFutureMeeting(meeting_id) == null);
-		assertTrue(m_cmApp.getFutureMeeting(meeting_id * 100) == null);
-		
-		
+		assertTrue(m_cmApp.getFutureMeeting(meeting_id * 100 + 1) == null);
 	}
 	
 }
