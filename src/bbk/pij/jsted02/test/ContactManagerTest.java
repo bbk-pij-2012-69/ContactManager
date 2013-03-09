@@ -15,7 +15,10 @@ import bbk.pij.jsted02.ContactImpl;
 import bbk.pij.jsted02.ContactManagerImpl;
 import bbk.pij.jsted02.interfaces.Contact;
 import bbk.pij.jsted02.interfaces.ContactManager;
+import bbk.pij.jsted02.interfaces.Meeting;
 import bbk.pij.jsted02.interfaces.PastMeeting;
+import bbk.pij.jsted02.meetings.FutureMeetingImpl;
+import bbk.pij.jsted02.meetings.PastMeetingImpl;
 import bbk.pij.jsted02.test.utils.TestHelper;
 
 public class ContactManagerTest {
@@ -31,6 +34,26 @@ public class ContactManagerTest {
 		m_date = Calendar.getInstance();
 
 		m_cmApp.addNewContact("Test1", "Test contact 1");
+		m_cmApp.addNewContact("Test2", "Test contact 2");
+		
+		Set<Contact> meeting_contacts = m_cmApp.getContacts("Test1"); 
+
+		// Add a future meeting
+		m_date.set(Calendar.YEAR, 2015);
+		m_cmApp.addFutureMeeting(meeting_contacts, m_date);
+
+		// Add a meeting in the past
+		m_date.set(Calendar.YEAR, 2001);
+		m_cmApp.addNewPastMeeting(meeting_contacts, m_date, "Some notes...");
+
+		// Add a second future meeting
+		m_date.set(Calendar.YEAR, 2020);
+		m_cmApp.addFutureMeeting(meeting_contacts, m_date);
+		
+		// Add a third future meeting
+		m_date.set(Calendar.YEAR, 2017);
+		m_cmApp.addFutureMeeting(meeting_contacts , m_date);
+		
 	}
 
 	@AfterClass
@@ -58,22 +81,13 @@ public class ContactManagerTest {
 	@Test
 	public void checkFutureMeeting()
 	{
-		Set<Contact> contacts = m_cmApp.getContacts("Test1");
-		
-		m_date.set(Calendar.YEAR, 2020);
-		int meeting_id = m_cmApp.addFutureMeeting(contacts, m_date);
-		
-		assertFalse(m_cmApp.getFutureMeeting(meeting_id) == null);
-		assertTrue(m_cmApp.getFutureMeeting(meeting_id * 100 + 1) == null);
+		assertFalse(m_cmApp.getFutureMeeting(0) == null);
+		assertTrue(m_cmApp.getFutureMeeting(27) == null);
 	}
 	
 	@Test(expected=IllegalArgumentException.class)
 	public void getPastMeetingInTheFuture() {
-		Set<Contact> contacts = m_cmApp.getContacts("Test1");
-		
-		m_date.set(Calendar.YEAR, 2020);
-		int meeting_id = m_cmApp.addFutureMeeting(contacts, m_date);
-		m_cmApp.getPastMeeting(meeting_id);
+		m_cmApp.getPastMeeting(3);
 	}
 	
 	@Test
@@ -81,8 +95,6 @@ public class ContactManagerTest {
 	{
 		Set<Contact> contacts = m_cmApp.getContacts("Test1");
 		
-		m_date.set(Calendar.YEAR, 2001);
-		m_cmApp.addNewPastMeeting(contacts, m_date, "Some notes...");
 		List<PastMeeting> meetings = m_cmApp.getPastMeetingList(contacts.iterator().next());
 		
 		int other_id = 0;
@@ -95,4 +107,38 @@ public class ContactManagerTest {
 		
 		assertTrue(m_cmApp.getPastMeeting(other_id * 100 + 1) == null);
 	}
+	
+	@Test
+	public void checkGetMeeting()
+	{
+		// I know I have created 4 meetings - 3 Future, 1 Past
+		assertTrue(m_cmApp.getMeeting(0) instanceof FutureMeetingImpl);
+		assertTrue(m_cmApp.getMeeting(1) instanceof PastMeetingImpl);
+		assertTrue(m_cmApp.getMeeting(2) instanceof FutureMeetingImpl);
+		assertTrue(m_cmApp.getMeeting(3) instanceof FutureMeetingImpl);
+		assertTrue(m_cmApp.getMeeting(4) == null);
+	}
+	
+	@Test
+	public void checkFutureMeetingListOnContact()
+	{
+		Set<Contact> contacts = m_cmApp.getContacts("Test1"); 
+		List<Meeting> meetings = m_cmApp.getFutureMeetingList(contacts.iterator().next());
+		
+		// Check only 3 meetings returned
+		assertTrue("Incorrect no. meetings returned (" + meetings.size() + "), expected 3", meetings.size() == 3);
+		
+		// Check they are in chronological order
+		assertTrue(meetings.get(0).getDate().compareTo(meetings.get(1).getDate()) < 0);
+		assertTrue(meetings.get(1).getDate().compareTo(meetings.get(2).getDate()) < 0);
+		
+		// Check there are no duplicates
+		//TODO: Clarify this
+		
+		// Check no meetings setup for Test2.
+		meetings = m_cmApp.getFutureMeetingList(m_cmApp.getContacts("Test2").iterator().next());
+		assertTrue(meetings.size() == 0);
+	
+	}
+	
 }
