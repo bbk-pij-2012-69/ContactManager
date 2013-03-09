@@ -18,7 +18,6 @@ import bbk.pij.jsted02.interfaces.PastMeeting;
 import bbk.pij.jsted02.meetings.FutureMeetingImpl;
 import bbk.pij.jsted02.meetings.MeetingImpl;
 import bbk.pij.jsted02.meetings.PastMeetingImpl;
-import bbk.pij.jsted02.ui.UserInterface;
 
 /**
  * @author Luke Stedman (jsted02), MSc CS Yr1 2012/13
@@ -28,20 +27,27 @@ public class ContactManagerImpl implements ContactManager {
 	 * initialised flag is set to true once the system has initialised and is
 	 * ready to be used.
 	 */
-	private boolean m_initialised = false;
+	
+	private boolean m_initialised;
 	/**
 	 * DataInterface variable, this will provide the data used in the system.
 	 */
-	private DataInterface m_dataInterface = new DataInterface();
+	private DataInterface m_dataInterface;
 
 	/**
 	 * Constructor, runs initialisation code to initialise the system.
 	 */
 	public ContactManagerImpl()
 	{
-		// Run the init function, this will load the require data from disk and
-		// make sure that everything is behaving itself.
-		this.init();
+		this.init(false);
+	}
+	
+	/**
+	 * Constructor, runs initialisation code to initialise the system.
+	 */
+	public ContactManagerImpl(boolean test)
+	{
+		this.init(test);
 	}
 	
 	/**
@@ -182,32 +188,24 @@ public class ContactManagerImpl implements ContactManager {
 	/**
 	 * Initialise function, will load contacts data into memory and prepare
 	 *  system for use.
-	 *  
-	 *  @return null
 	 */
-	private void init()
+	private void init(boolean test)
 	{
-		// Load data for the data interface object
-		//dataInterface.init();
-		//TODO If an exception occurred previously, would we find a corrupted contacts.txt file?
-		this.m_initialised = true;
+		m_initialised = false;
+		m_dataInterface = new DataInterface();
+		m_initialised = true;
 	}
 	
 	/**
 	 * Finalise function, will call flush to save to disk and make sure that
 	 *  everything is ok to shutdown the system.
 	 *  
-	 *  @return null
 	 * @throws Throwable 
 	 */
 	@Override
 	protected void finalize() throws Throwable
 	{
-		System.out.println("It's the final countdown...");
-		//TODO Clean-up system.
-		// Flush data to disk
 		this.flush();
-		//TODO If an exception occurs, should we save the data that has been edited during the session?
 		this.m_initialised = false;
 		super.finalize();
 	}
