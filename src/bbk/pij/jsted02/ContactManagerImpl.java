@@ -145,6 +145,10 @@ public class ContactManagerImpl implements ContactManager {
 	@Override
 	public List<Meeting> getFutureMeetingList(Contact contact)
 	{
+		// Call checkContact method, throws and IllegalArgument if the contact 
+		//  does not exist
+		checkContact(contact);
+
 		// Get the full list of future meetings and create a new list to store
 		//  the filtered meetings
 		List<Meeting> meetings = m_dataInterface.getAllFutureMeetings();
@@ -156,7 +160,6 @@ public class ContactManagerImpl implements ContactManager {
 		{
 			if(meeting.getContacts().contains(contact))
 			{
-
 				returned_meetings.add(meeting);
 			}
 		}
@@ -165,6 +168,14 @@ public class ContactManagerImpl implements ContactManager {
 		Collections.sort(returned_meetings, MeetingImpl.COMPARATOR_DATE_ASC);
 
 		return returned_meetings;
+	}
+
+	private void checkContact(Contact contact)
+	{
+		if(getContacts(contact.getId()).size() == 0)
+		{
+			throw new IllegalArgumentException("Invalid contact - a contact supplied is not known.");
+		}
 	}
 
 	/**

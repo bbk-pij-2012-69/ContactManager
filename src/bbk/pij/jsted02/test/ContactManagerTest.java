@@ -146,7 +146,15 @@ public class ContactManagerTest {
 		// Check no meetings setup for Test2.
 		meetings = m_cmApp.getFutureMeetingList(m_cmApp.getContacts("Test2").iterator().next());
 		assertTrue(meetings.size() == 0);
+	}
 	
+	@Test(expected=IllegalArgumentException.class)
+	public void checkFutureMeetingListUnknowContact()
+	{
+		ContactImpl contact = new ContactImpl();
+		contact.setName("RANDOM_CONTACT");
+		m_cmApp.getFutureMeetingList(contact);
+
 	}
 	
 }

@@ -40,6 +40,8 @@ public interface ContactManager {
 	 * @return the meeting with the requested ID, or null if it there is none.
 	 */
 	Meeting getMeeting(int id);
+	
+	//TODO: Chronological and duplicates question?
 	/**
 	 * Returns the list of future meetings scheduled with this contact.
 	 *
@@ -52,6 +54,8 @@ public interface ContactManager {
 	 * @throws IllegalArgumentException if the contact does not exist
 	 */
 	List<Meeting> getFutureMeetingList(Contact contact);
+
+	//TODO: Inconsistent?
 	/**
 	 * Returns the list of meetings that are scheduled for, or that took
 	 * place on, the specified date
