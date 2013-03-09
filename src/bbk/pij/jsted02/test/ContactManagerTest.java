@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Set;
 
 import org.junit.AfterClass;
+import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -25,35 +26,44 @@ public class ContactManagerTest {
 
 	static ContactManager m_cmApp;
 	static Set<Contact> m_contacts;
-	static Calendar m_date;
+	private static Calendar m_date_2001 = Calendar.getInstance();
+	private static Calendar m_date_2015 = Calendar.getInstance();
+	private static Calendar m_date_2017 = Calendar.getInstance();
+	private static Calendar m_date_2020 = Calendar.getInstance();
+	
+	@Before
+	public void setUpBefore()
+	{
+
+		
+	}
 	
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
 		m_cmApp = new ContactManagerImpl();
 		m_contacts = new HashSet<Contact>(TestHelper.generateContacts(10));
-		m_date = Calendar.getInstance();
 
 		m_cmApp.addNewContact("Test1", "Test contact 1");
 		m_cmApp.addNewContact("Test2", "Test contact 2");
-		
+
 		Set<Contact> meeting_contacts = m_cmApp.getContacts("Test1"); 
 
 		// Add a future meeting
-		m_date.set(Calendar.YEAR, 2015);
-		m_cmApp.addFutureMeeting(meeting_contacts, m_date);
+		m_date_2001.set(Calendar.YEAR, 2001);
+		m_date_2015.set(Calendar.YEAR, 2015);
+		m_date_2017.set(Calendar.YEAR, 2017);
+		m_date_2020.set(Calendar.YEAR, 2020);
+		
+		m_cmApp.addFutureMeeting(meeting_contacts, m_date_2020);
 
 		// Add a meeting in the past
-		m_date.set(Calendar.YEAR, 2001);
-		m_cmApp.addNewPastMeeting(meeting_contacts, m_date, "Some notes...");
+		m_cmApp.addNewPastMeeting(meeting_contacts, m_date_2001, "Some notes...");
 
 		// Add a second future meeting
-		m_date.set(Calendar.YEAR, 2020);
-		m_cmApp.addFutureMeeting(meeting_contacts, m_date);
+		m_cmApp.addFutureMeeting(meeting_contacts, m_date_2015);
 		
 		// Add a third future meeting
-		m_date.set(Calendar.YEAR, 2017);
-		m_cmApp.addFutureMeeting(meeting_contacts , m_date);
-		
+		m_cmApp.addFutureMeeting(meeting_contacts , m_date_2017);
 	}
 
 	@AfterClass
@@ -62,8 +72,7 @@ public class ContactManagerTest {
 
 	@Test(expected=IllegalArgumentException.class)
 	public void addFutureMeetingCheckDate() {
-		m_date.set(Calendar.YEAR, 2001);
-		m_cmApp.addFutureMeeting(m_contacts, m_date);
+		m_cmApp.addFutureMeeting(m_contacts, m_date_2001);
 	}
 
 	@Test(expected=IllegalArgumentException.class)
@@ -74,8 +83,7 @@ public class ContactManagerTest {
 		Set<Contact> contacts = new HashSet<Contact>();
 		contacts.add(contact);
 		
-		m_date.set(Calendar.YEAR, 2020);
-		m_cmApp.addFutureMeeting(contacts, m_date);
+		m_cmApp.addFutureMeeting(contacts, m_date_2020);
 	}
 
 	@Test

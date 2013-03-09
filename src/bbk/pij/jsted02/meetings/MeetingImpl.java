@@ -4,6 +4,7 @@
 package bbk.pij.jsted02.meetings;
 
 import java.util.Calendar;
+import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -17,6 +18,15 @@ import bbk.pij.jsted02.interfaces.Meeting;
  */
 public class MeetingImpl implements Meeting {
 
+	
+	public static Comparator<Meeting> COMPARATOR_DATE_ASC = 
+			new Comparator<Meeting>()
+			{
+				@Override
+				public int compare(Meeting m1, Meeting m2) {
+					return m1.getDate().compareTo(m2.getDate());
+				}
+			};
 	/**
 	 * Static count to increment with each created Meeting.
 	 */
@@ -71,6 +81,7 @@ public class MeetingImpl implements Meeting {
 	@Override
 	public Calendar getDate()
 	{
+		//System.out.println("Getting calendar for " + m_id + ": " + m_date.get(Calendar.YEAR));
 		return m_date;
 	}
 
@@ -81,6 +92,7 @@ public class MeetingImpl implements Meeting {
 	 */
 	public void setDate(Calendar date)
 	{
+		//System.out.println("Setting calendar for " + m_id + ": " + date.get(Calendar.YEAR));
 		m_date = date;
 	}
 

@@ -197,7 +197,7 @@ public class DataInterface {
 		// Loop over each contact in the data store.
 		for(int i = 0; i < this.m_data.get(DataType.MEETING).size(); ++i)
 		{
-			// If the contact's name matches the provided name, return it.
+			// If the ID matches the provided id return
 			if(((MeetingImpl)this.m_data.get(DataType.MEETING).get(i)).getId() == id)
 				return (MeetingImpl)this.m_data.get(DataType.MEETING).get(i);
 		}
@@ -209,14 +209,21 @@ public class DataInterface {
 		return m_data.get(DataType.MEETING);
 	}
 
-	@SuppressWarnings("unchecked")
 	public Set<Contact> getAllContacts(){
 		return new HashSet<Contact>((Collection<? extends Contact>) this.m_data.get(DataType.CONTACT));
 	}
 
-	public List<Meeting> getFutureMeetingList(Contact contact) {
-		// TODO Auto-generated method stub
-		return null;
+	public List<Meeting> getAllFutureMeetings() {
+		List<Object> meetings = getAllMeetings();
+		List<Meeting> future_meetings = new ArrayList<Meeting>();
+		for(Object meeting: meetings)
+		{
+			if(meeting instanceof FutureMeetingImpl)
+			{
+				future_meetings.add((Meeting) meeting);
+			}
+		}
+		return future_meetings;
 	}
 
 	public List<Meeting> getFutureMeetingList(Calendar date) {

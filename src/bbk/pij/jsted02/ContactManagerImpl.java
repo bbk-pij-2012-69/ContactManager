@@ -6,6 +6,7 @@ package bbk.pij.jsted02;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -144,7 +145,26 @@ public class ContactManagerImpl implements ContactManager {
 	@Override
 	public List<Meeting> getFutureMeetingList(Contact contact)
 	{
-		return m_dataInterface.getFutureMeetingList(contact);
+		// Get the full list of future meetings and create a new list to store
+		//  the filtered meetings
+		List<Meeting> meetings = m_dataInterface.getAllFutureMeetings();
+		List<Meeting> returned_meetings = new ArrayList<Meeting>();
+		
+		// Iterate over the meetings and check the contacts exist for that
+		//  meeting, if he does then append the meeting to the filtered list
+		for(Meeting meeting: meetings)
+		{
+			if(meeting.getContacts().contains(contact))
+			{
+
+				returned_meetings.add(meeting);
+			}
+		}
+
+		// Sort using the Meeting date ascending comparator and return
+		Collections.sort(returned_meetings, MeetingImpl.COMPARATOR_DATE_ASC);
+
+		return returned_meetings;
 	}
 
 	/**
