@@ -85,11 +85,14 @@ public class ContactManagerTest {
 		m_cmApp.addNewPastMeeting(contacts, m_date, "Some notes...");
 		List<PastMeeting> meetings = m_cmApp.getPastMeetingList(contacts.iterator().next());
 		
+		int other_id = 0;
+		
 		for(PastMeeting meeting : meetings)
 		{
 			assertFalse(m_cmApp.getPastMeeting(meeting.getId()) == null);
+			other_id += meeting.getId();
 		}
 		
-		//assertTrue(m_cmApp.getFutureMeeting(meeting_id * 100 + 1) == null);
+		assertTrue(m_cmApp.getPastMeeting(other_id * 100 + 1) == null);
 	}
 }

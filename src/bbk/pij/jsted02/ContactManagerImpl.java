@@ -3,6 +3,7 @@
  */
 package bbk.pij.jsted02;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.HashSet;
@@ -39,7 +40,7 @@ public class ContactManagerImpl implements ContactManager {
 	 */
 	public ContactManagerImpl()
 	{
-		this.init(false);
+		init(false);
 	}
 	
 	/**
@@ -47,17 +48,28 @@ public class ContactManagerImpl implements ContactManager {
 	 */
 	public ContactManagerImpl(boolean test)
 	{
-		this.init(test);
+		init(test);
 	}
 	
+	/**
+	 * Method to get an array of id's from the provided set of contacts.
+	 * 
+	 * @param list of contacts from which to get the id's
+	 * @return int array containing id's of contacts.
+	 */
 	private int[] getContactIds(Set<Contact> contacts)
 	{
+		// Initialise a counter and array that will be returned
 		int count = 0;
 		int[] ids = new int[contacts.size()];
+		
+		// Iterate over each contact, add id to the array and increment the 
+		//  count
 		for(Contact contact : contacts)
 		{
 			ids[count++] = contact.getId();
 		}
+		
 		return ids;
 	}
 	
@@ -67,16 +79,23 @@ public class ContactManagerImpl implements ContactManager {
 	@Override
 	public int addFutureMeeting(Set<Contact> contacts, Calendar date)
 	{
+		// Using the getContactId's method get all known contacts from the data
 		Set<Contact> foundContacts = getContacts(getContactIds(contacts));
+		
+		// Check if the no. of contacts provided matches the number of contacts
+		//  found in the data, if not throw an exception
 		if(contacts.size() != foundContacts.size())
 		{
 			throw new IllegalArgumentException("Invalid contact - a contact supplied is not known.");
 		}
+		// Check the date provided, if in the past throw an exception.
 		else if (date.compareTo(Calendar.getInstance()) <= 0)
 		{
 			throw new IllegalArgumentException("Invalid date - must be in the future.");
 		}
-		
+
+		// Otherwise all is good and we can continue, create the meeting and 
+		//  set the various attributes, add to the data and return the id
 		FutureMeetingImpl meeting = new FutureMeetingImpl();
 		meeting.setDate(date);
 		meeting.setContacts(contacts);
@@ -90,7 +109,15 @@ public class ContactManagerImpl implements ContactManager {
 	@Override
 	public PastMeeting getPastMeeting(int id)
 	{
-		return this.m_dataInterface.getPastMeeting(id);
+		// Get the meeting from the data interface, check the meeting instance
+		//  if a Future meeting then throw an exception
+		Meeting meeting = m_dataInterface.getPastMeeting(id);
+		if(meeting instanceof FutureMeetingImpl)
+		{
+			throw new IllegalArgumentException("Invalid meeting id - is associated with FutureMeeting.");
+		}
+		
+		return (PastMeeting) meeting;
 	}
 
 	/**
@@ -99,7 +126,7 @@ public class ContactManagerImpl implements ContactManager {
 	@Override
 	public FutureMeeting getFutureMeeting(int id)
 	{
-		return this.m_dataInterface.getFutureMeeting(id);
+		return m_dataInterface.getFutureMeeting(id);
 	}
 
 	/**
@@ -108,7 +135,7 @@ public class ContactManagerImpl implements ContactManager {
 	@Override
 	public Meeting getMeeting(int id)
 	{
-		return this.m_dataInterface.getMeeting(id);
+		return m_dataInterface.getMeeting(id);
 	}
 
 	/**
@@ -117,7 +144,7 @@ public class ContactManagerImpl implements ContactManager {
 	@Override
 	public List<Meeting> getFutureMeetingList(Contact contact)
 	{
-		return this.m_dataInterface.getFutureMeetingList(contact);
+		return m_dataInterface.getFutureMeetingList(contact);
 	}
 
 	/**
@@ -126,7 +153,7 @@ public class ContactManagerImpl implements ContactManager {
 	@Override
 	public List<Meeting> getFutureMeetingList(Calendar date)
 	{
-		return this.m_dataInterface.getFutureMeetingList(date);
+		return m_dataInterface.getFutureMeetingList(date);
 	}
 
 	/**
@@ -135,7 +162,22 @@ public class ContactManagerImpl implements ContactManager {
 	@Override
 	public List<PastMeeting> getPastMeetingList(Contact contact)
 	{
-		return this.m_dataInterface.getPastMeetingList(contact);
+		// Create list to store meetings that the contact attended and get a
+		//  generic list of all meeting objects.
+		List<PastMeeting> meetings = new ArrayList<PastMeeting>();
+		List<Object> all_meetings = m_dataInterface.getAllMeetings();
+		
+		// Iterate over all meetings and check if it is a PastMeeting and if
+		//  the contact attended the meeting - if so then append to the list.
+		for(Object meeting: all_meetings)
+		{
+			if(meeting instanceof PastMeetingImpl && ((Meeting) meeting).getContacts().contains(contact))
+			{
+				meetings.add((PastMeeting) meeting);
+			}
+		}
+		
+		return meetings;
 	}
 
 	/**
@@ -149,7 +191,7 @@ public class ContactManagerImpl implements ContactManager {
 		meeting.setContacts(contacts);
 		meeting.setDate(date);
 		meeting.setNotes(text);
-		this.m_dataInterface.addMeeting(meeting);
+		m_dataInterface.addMeeting(meeting);
 	}
 
 	/**
@@ -158,9 +200,9 @@ public class ContactManagerImpl implements ContactManager {
 	@Override
 	public void addMeetingNotes(int id, String text)
 	{
-		MeetingImpl meeting = (MeetingImpl)this.m_dataInterface.getMeeting(id);
+		MeetingImpl meeting = (MeetingImpl)m_dataInterface.getMeeting(id);
 		meeting.addNotes(text);
-		this.m_dataInterface.updMeeting(meeting);
+		m_dataInterface.updMeeting(meeting);
 	}
 
 	/**
@@ -182,7 +224,7 @@ public class ContactManagerImpl implements ContactManager {
 	@Override
 	public Set<Contact> getContacts(int... ids)
 	{
-		return new HashSet<Contact>((Collection<? extends Contact>) this.m_dataInterface.getContacts(ids));
+		return new HashSet<Contact>((Collection<? extends Contact>) m_dataInterface.getContacts(ids));
 	}
 
 	/**
@@ -191,7 +233,7 @@ public class ContactManagerImpl implements ContactManager {
 	@Override
 	public Set<Contact> getContacts(String name)
 	{
-		return new HashSet<Contact>((Collection<? extends Contact>) this.m_dataInterface.getContacts(name));
+		return new HashSet<Contact>((Collection<? extends Contact>) m_dataInterface.getContacts(name));
 	}
 
 	/**
@@ -222,8 +264,8 @@ public class ContactManagerImpl implements ContactManager {
 	@Override
 	protected void finalize() throws Throwable
 	{
-		this.flush();
-		this.m_initialised = false;
+		flush();
+		m_initialised = false;
 		super.finalize();
 	}
 

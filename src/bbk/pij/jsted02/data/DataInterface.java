@@ -18,7 +18,6 @@ import bbk.pij.jsted02.ContactImpl;
 import bbk.pij.jsted02.interfaces.Contact;
 import bbk.pij.jsted02.interfaces.FutureMeeting;
 import bbk.pij.jsted02.interfaces.Meeting;
-import bbk.pij.jsted02.interfaces.PastMeeting;
 import bbk.pij.jsted02.meetings.FutureMeetingImpl;
 import bbk.pij.jsted02.meetings.MeetingImpl;
 
@@ -179,8 +178,8 @@ public class DataInterface {
 	}
 
 
-	public PastMeeting getPastMeeting(int id) {
-		return (PastMeeting)this.getMeeting(id);
+	public Meeting getPastMeeting(int id) {
+		return this.getMeeting(id);
 	}
 
 
@@ -224,13 +223,6 @@ public class DataInterface {
 		// TODO Auto-generated method stub
 		return null;
 	}
-
-
-	public List<PastMeeting> getPastMeetingList(Contact contact) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
 
 	public void updMeeting(Meeting meeting) {
 		// TODO Auto-generated method stub
