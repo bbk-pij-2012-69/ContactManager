@@ -172,6 +172,8 @@ public class ContactManagerImpl implements ContactManager {
 
 	private void checkContact(Contact contact)
 	{
+		// If the size of the contacts list returned when we pass in the
+		//  contact id is 0 then the contact must not exist and we throw
 		if(getContacts(contact.getId()).size() == 0)
 		{
 			throw new IllegalArgumentException("Invalid contact - a contact supplied is not known.");
@@ -193,21 +195,30 @@ public class ContactManagerImpl implements ContactManager {
 	@Override
 	public List<PastMeeting> getPastMeetingList(Contact contact)
 	{
-		// Create list to store meetings that the contact attended and get a
-		//  generic list of all meeting objects
-		List<PastMeeting> meetings = new ArrayList<PastMeeting>();
-		List<Object> all_meetings = m_dataInterface.getAllMeetings();
 		
-		// Iterate over all meetings and check if it is a PastMeeting and if
-		//  the contact attended the meeting - if so then append to the list
-		for(Object meeting: all_meetings)
+		// Call checkContact method, throws and IllegalArgument if the contact 
+		//  does not exist
+		checkContact(contact);
+		
+		// Get the full list of past meetings and create a new list to store
+		//  the filtered meetings
+		List<Meeting> meetings = m_dataInterface.getAllPastMeetings();
+		List<PastMeeting> returned_meetings = new ArrayList<PastMeeting>();
+		
+		// Iterate over the meetings and check the contacts exist for that
+		//  meeting, if he does then append the meeting to the filtered list
+		for(Object meeting: meetings)
 		{
-			if(meeting instanceof PastMeetingImpl && ((Meeting) meeting).getContacts().contains(contact))
+			if(((Meeting) meeting).getContacts().contains(contact))
 			{
-				meetings.add((PastMeeting) meeting);
+				returned_meetings.add((PastMeeting) meeting);
 			}
 		}
-		return meetings;
+		
+		// Sort using the Meeting date descending comparator and return
+		Collections.sort(returned_meetings, MeetingImpl.COMPARATOR_DATE_DSC);
+
+		return returned_meetings;
 	}
 
 	/**

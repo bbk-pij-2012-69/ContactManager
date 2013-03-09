@@ -20,6 +20,7 @@ import bbk.pij.jsted02.interfaces.FutureMeeting;
 import bbk.pij.jsted02.interfaces.Meeting;
 import bbk.pij.jsted02.meetings.FutureMeetingImpl;
 import bbk.pij.jsted02.meetings.MeetingImpl;
+import bbk.pij.jsted02.meetings.PastMeetingImpl;
 
 /**
  * @author Luke Stedman (jsted02), MSc CS Yr1 2012/13
@@ -234,5 +235,19 @@ public class DataInterface {
 	public void updMeeting(Meeting meeting) {
 		// TODO Auto-generated method stub
 		
+	}
+
+
+	public List<Meeting> getAllPastMeetings() {
+		List<Object> meetings = getAllMeetings();
+		List<Meeting> future_meetings = new ArrayList<Meeting>();
+		for(Object meeting: meetings)
+		{
+			if(meeting instanceof PastMeetingImpl)
+			{
+				future_meetings.add((Meeting) meeting);
+			}
+		}
+		return future_meetings;
 	}
 }

@@ -27,6 +27,8 @@ public class ContactManagerTest {
 	static ContactManager m_cmApp;
 	static Set<Contact> m_contacts;
 	private static Calendar m_date_2001 = Calendar.getInstance();
+	private static Calendar m_date_2003 = Calendar.getInstance();
+	private static Calendar m_date_2010 = Calendar.getInstance();
 	private static Calendar m_date_2015 = Calendar.getInstance();
 	private static Calendar m_date_2017 = Calendar.getInstance();
 	private static Calendar m_date_2020 = Calendar.getInstance();
@@ -50,6 +52,8 @@ public class ContactManagerTest {
 
 		// Add a future meeting
 		m_date_2001.set(Calendar.YEAR, 2001);
+		m_date_2003.set(Calendar.YEAR, 2003);
+		m_date_2010.set(Calendar.YEAR, 2010);
 		m_date_2015.set(Calendar.YEAR, 2015);
 		m_date_2017.set(Calendar.YEAR, 2017);
 		m_date_2020.set(Calendar.YEAR, 2020);
@@ -64,7 +68,14 @@ public class ContactManagerTest {
 		
 		// Add a third future meeting
 		m_cmApp.addFutureMeeting(meeting_contacts , m_date_2017);
-	}
+
+		// Add a second meeting in the past
+		m_cmApp.addNewPastMeeting(meeting_contacts, m_date_2003, "Some notes...");
+
+		// Add a third meeting in the past
+		m_cmApp.addNewPastMeeting(meeting_contacts, m_date_2010, "Some notes...");
+
+}
 
 	@AfterClass
 	public static void tearDownAfterClass() throws Exception {
@@ -115,6 +126,24 @@ public class ContactManagerTest {
 		
 		assertTrue(m_cmApp.getPastMeeting(other_id * 100 + 1) == null);
 	}
+
+	@Test
+	public void checkPastMeetingList()
+	{
+		Set<Contact> contacts = m_cmApp.getContacts("Test1");
+		
+		List<PastMeeting> meetings = m_cmApp.getPastMeetingList(contacts.iterator().next());
+		
+		int other_id = 0;
+		
+		for(PastMeeting meeting : meetings)
+		{
+			assertFalse(m_cmApp.getPastMeeting(meeting.getId()) == null);
+			other_id += meeting.getId();
+		}
+		
+		assertTrue(m_cmApp.getPastMeeting(other_id * 100 + 1) == null);
+	}
 	
 	@Test
 	public void checkGetMeeting()
@@ -124,7 +153,9 @@ public class ContactManagerTest {
 		assertTrue(m_cmApp.getMeeting(1) instanceof PastMeetingImpl);
 		assertTrue(m_cmApp.getMeeting(2) instanceof FutureMeetingImpl);
 		assertTrue(m_cmApp.getMeeting(3) instanceof FutureMeetingImpl);
-		assertTrue(m_cmApp.getMeeting(4) == null);
+		assertTrue(m_cmApp.getMeeting(4) instanceof PastMeetingImpl);
+		assertTrue(m_cmApp.getMeeting(5) instanceof PastMeetingImpl);
+		assertTrue(m_cmApp.getMeeting(6) == null);
 	}
 	
 	@Test
@@ -136,7 +167,7 @@ public class ContactManagerTest {
 		// Check only 3 meetings returned
 		assertTrue("Incorrect no. meetings returned (" + meetings.size() + "), expected 3", meetings.size() == 3);
 		
-		// Check they are in chronological order
+		// Check they are in chronological order (ascending nearest first)
 		assertTrue(meetings.get(0).getDate().compareTo(meetings.get(1).getDate()) < 0);
 		assertTrue(meetings.get(1).getDate().compareTo(meetings.get(2).getDate()) < 0);
 		
@@ -154,7 +185,34 @@ public class ContactManagerTest {
 		ContactImpl contact = new ContactImpl();
 		contact.setName("RANDOM_CONTACT");
 		m_cmApp.getFutureMeetingList(contact);
-
 	}
 	
+	@Test
+	public void checkPastMeetingListOnContact()
+	{
+		Set<Contact> contacts = m_cmApp.getContacts("Test1"); 
+		List<PastMeeting> meetings = m_cmApp.getPastMeetingList(contacts.iterator().next());
+		
+		// Check only 3 meetings returned
+		assertTrue("Incorrect no. meetings returned (" + meetings.size() + "), expected 3", meetings.size() == 3);
+		
+		// Check they are in chronological order (descending, most recent first)
+		assertTrue(meetings.get(0).getDate().compareTo(meetings.get(1).getDate()) > 0);
+		assertTrue(meetings.get(1).getDate().compareTo(meetings.get(2).getDate()) > 0);
+		
+		// Check there are no duplicates
+		//TODO: Clarify this
+		
+		// Check no meetings setup for Test2.
+		meetings = m_cmApp.getPastMeetingList(m_cmApp.getContacts("Test2").iterator().next());
+		assertTrue(meetings.size() == 0);
+	}	
+	
+	@Test(expected=IllegalArgumentException.class)
+	public void checkPastMeetingListUnknowContact()
+	{
+		ContactImpl contact = new ContactImpl();
+		contact.setName("RANDOM_CONTACT");
+		m_cmApp.getPastMeetingList(contact);
+	}
 }
