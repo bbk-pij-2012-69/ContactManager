@@ -16,7 +16,7 @@ public class ContactImpl implements Contact {
 	 */
 	private static int contact_count = 0;
 	/**
-	 * List of notes associated with Contact.
+	 * Notes associate with the Contact.
 	 */
 	private String m_notes = "";
 	/**
@@ -41,7 +41,8 @@ public class ContactImpl implements Contact {
 	 * @see bbk.pij.jsted02.interfaces.Contact#getId()
 	 */
 	@Override
-	public int getId() {
+	public int getId()
+	{
 		return m_id;
 	}
 
@@ -105,10 +106,11 @@ public class ContactImpl implements Contact {
 	{
 		addNotes(note);
 	}
-	
 
 	/**
+	 * Prints out information about the contact in a user readable format
 	 * 
+	 * @return Returns string of contact information.
 	 */
 	public String toString()
 	{

@@ -15,6 +15,7 @@ import bbk.pij.jsted02.interfaces.ContactManager;
 import bbk.pij.jsted02.interfaces.FutureMeeting;
 import bbk.pij.jsted02.interfaces.Meeting;
 import bbk.pij.jsted02.interfaces.PastMeeting;
+import bbk.pij.jsted02.meetings.PastMeetingImpl;
 import bbk.pij.jsted02.ui.UserInterface;
 
 /**
@@ -47,8 +48,15 @@ public class ContactManagerImpl implements ContactManager {
 	@Override
 	public int addFutureMeeting(Set<Contact> contacts, Calendar date)
 	{
-		// TODO Implement functionality
-		return 0;
+		if (date.compareTo(Calendar.getInstance()) > 0)
+		{
+			FutureMeetingImpl meeting = new FutureMeetingImpl();
+			meeting.setDate(date);
+			meeting.setContacts(contacts);
+			m_dataInterface.addMeeting(meeting);
+			return meeting.getId();
+		}
+		return -1;
 	}
 
 	/**
@@ -57,8 +65,7 @@ public class ContactManagerImpl implements ContactManager {
 	@Override
 	public PastMeeting getPastMeeting(int id)
 	{
-		// TODO Implement functionality
-		return null;
+		return this.m_dataInterface.getPastMeeting(id);
 	}
 
 	/**
@@ -67,8 +74,7 @@ public class ContactManagerImpl implements ContactManager {
 	@Override
 	public FutureMeeting getFutureMeeting(int id)
 	{
-		// TODO Implement functionality
-		return null;
+		return this.m_dataInterface.getFutureMeeting(id);
 	}
 
 	/**
@@ -77,8 +83,7 @@ public class ContactManagerImpl implements ContactManager {
 	@Override
 	public Meeting getMeeting(int id)
 	{
-		// TODO Implement functionality
-		return null;
+		return this.m_dataInterface.getMeeting(id);
 	}
 
 	/**
@@ -87,8 +92,7 @@ public class ContactManagerImpl implements ContactManager {
 	@Override
 	public List<Meeting> getFutureMeetingList(Contact contact)
 	{
-		// TODO Implement functionality
-		return null;
+		return this.m_dataInterface.getFutureMeetingList(contact);
 	}
 
 	/**
@@ -97,8 +101,7 @@ public class ContactManagerImpl implements ContactManager {
 	@Override
 	public List<Meeting> getFutureMeetingList(Calendar date)
 	{
-		// TODO Implement functionality
-		return null;
+		return this.m_dataInterface.getFutureMeetingList(date);
 	}
 
 	/**
@@ -107,8 +110,7 @@ public class ContactManagerImpl implements ContactManager {
 	@Override
 	public List<PastMeeting> getPastMeetingList(Contact contact)
 	{
-		// TODO Implement functionality
-		return null;
+		return this.m_dataInterface.getPastMeetingList(contact);
 	}
 
 	/**
@@ -118,8 +120,11 @@ public class ContactManagerImpl implements ContactManager {
 	public void addNewPastMeeting(Set<Contact> contacts, Calendar date,
 			String text)
 	{
-		// TODO Implement functionality
-
+		PastMeetingImpl meeting = new PastMeetingImpl();
+		meeting.setContacts(contacts);
+		meeting.setDate(date);
+		meeting.setNotes(text);
+		this.m_dataInterface.addMeeting(meeting);
 	}
 
 	/**
@@ -128,8 +133,9 @@ public class ContactManagerImpl implements ContactManager {
 	@Override
 	public void addMeetingNotes(int id, String text)
 	{
-		// TODO Implement functionality
-
+		MeetingImpl meeting = (MeetingImpl)this.m_dataInterface.getMeeting(id);
+		meeting.addNotes(text);
+		this.m_dataInterface.updMeeting(meeting);
 	}
 
 	/**
