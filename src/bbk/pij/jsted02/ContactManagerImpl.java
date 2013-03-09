@@ -194,12 +194,12 @@ public class ContactManagerImpl implements ContactManager {
 	public List<PastMeeting> getPastMeetingList(Contact contact)
 	{
 		// Create list to store meetings that the contact attended and get a
-		//  generic list of all meeting objects.
+		//  generic list of all meeting objects
 		List<PastMeeting> meetings = new ArrayList<PastMeeting>();
 		List<Object> all_meetings = m_dataInterface.getAllMeetings();
 		
 		// Iterate over all meetings and check if it is a PastMeeting and if
-		//  the contact attended the meeting - if so then append to the list.
+		//  the contact attended the meeting - if so then append to the list
 		for(Object meeting: all_meetings)
 		{
 			if(meeting instanceof PastMeetingImpl && ((Meeting) meeting).getContacts().contains(contact))
@@ -207,7 +207,6 @@ public class ContactManagerImpl implements ContactManager {
 				meetings.add((PastMeeting) meeting);
 			}
 		}
-		
 		return meetings;
 	}
 
@@ -218,6 +217,8 @@ public class ContactManagerImpl implements ContactManager {
 	public void addNewPastMeeting(Set<Contact> contacts, Calendar date,
 			String text)
 	{
+		// Create a new meeting, set the various attributes and add to the data
+		//  interface
 		PastMeetingImpl meeting = new PastMeetingImpl();
 		meeting.setContacts(contacts);
 		meeting.setDate(date);
