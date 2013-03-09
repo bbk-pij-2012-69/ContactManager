@@ -15,6 +15,8 @@ import bbk.pij.jsted02.interfaces.ContactManager;
 import bbk.pij.jsted02.interfaces.FutureMeeting;
 import bbk.pij.jsted02.interfaces.Meeting;
 import bbk.pij.jsted02.interfaces.PastMeeting;
+import bbk.pij.jsted02.meetings.FutureMeetingImpl;
+import bbk.pij.jsted02.meetings.MeetingImpl;
 import bbk.pij.jsted02.meetings.PastMeetingImpl;
 import bbk.pij.jsted02.ui.UserInterface;
 

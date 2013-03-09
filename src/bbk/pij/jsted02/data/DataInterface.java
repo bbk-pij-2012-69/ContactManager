@@ -15,12 +15,12 @@ import java.util.List;
 import java.util.Set;
 
 import bbk.pij.jsted02.ContactImpl;
-import bbk.pij.jsted02.FutureMeetingImpl;
-import bbk.pij.jsted02.MeetingImpl;
 import bbk.pij.jsted02.interfaces.Contact;
 import bbk.pij.jsted02.interfaces.FutureMeeting;
 import bbk.pij.jsted02.interfaces.Meeting;
 import bbk.pij.jsted02.interfaces.PastMeeting;
+import bbk.pij.jsted02.meetings.FutureMeetingImpl;
+import bbk.pij.jsted02.meetings.MeetingImpl;
 
 /**
  * @author Luke Stedman (jsted02), MSc CS Yr1 2012/13

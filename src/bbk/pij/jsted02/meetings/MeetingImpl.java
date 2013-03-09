@@ -113,4 +113,9 @@ public class MeetingImpl implements Meeting {
 		setContacts( new HashSet<Contact>(contacts));
 	}
 
+	public void addNotes(String text) {
+		// TODO Auto-generated method stub
+		
+	}
+
 }
