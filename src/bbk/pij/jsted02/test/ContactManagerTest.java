@@ -4,6 +4,7 @@ import static org.junit.Assert.*;
 
 import java.util.Calendar;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import org.junit.AfterClass;
@@ -14,6 +15,7 @@ import bbk.pij.jsted02.ContactImpl;
 import bbk.pij.jsted02.ContactManagerImpl;
 import bbk.pij.jsted02.interfaces.Contact;
 import bbk.pij.jsted02.interfaces.ContactManager;
+import bbk.pij.jsted02.interfaces.PastMeeting;
 import bbk.pij.jsted02.test.utils.TestHelper;
 
 public class ContactManagerTest {
@@ -27,6 +29,8 @@ public class ContactManagerTest {
 		m_cmApp = new ContactManagerImpl();
 		m_contacts = new HashSet<Contact>(TestHelper.generateContacts(10));
 		m_date = Calendar.getInstance();
+
+		m_cmApp.addNewContact("Test1", "Test contact 1");
 	}
 
 	@AfterClass
@@ -54,7 +58,6 @@ public class ContactManagerTest {
 	@Test
 	public void checkFutureMeeting()
 	{
-		m_cmApp.addNewContact("Test1", "Test contact 1");
 		Set<Contact> contacts = m_cmApp.getContacts("Test1");
 		
 		m_date.set(Calendar.YEAR, 2020);
@@ -64,4 +67,29 @@ public class ContactManagerTest {
 		assertTrue(m_cmApp.getFutureMeeting(meeting_id * 100 + 1) == null);
 	}
 	
+	@Test(expected=IllegalArgumentException.class)
+	public void getPastMeetingInTheFuture() {
+		Set<Contact> contacts = m_cmApp.getContacts("Test1");
+		
+		m_date.set(Calendar.YEAR, 2020);
+		int meeting_id = m_cmApp.addFutureMeeting(contacts, m_date);
+		m_cmApp.getPastMeeting(meeting_id);
+	}
+	
+	@Test
+	public void checkPastMeeting()
+	{
+		Set<Contact> contacts = m_cmApp.getContacts("Test1");
+		
+		m_date.set(Calendar.YEAR, 2001);
+		m_cmApp.addNewPastMeeting(contacts, m_date, "Some notes...");
+		List<PastMeeting> meetings = m_cmApp.getPastMeetingList(contacts.iterator().next());
+		
+		for(PastMeeting meeting : meetings)
+		{
+			assertFalse(m_cmApp.getPastMeeting(meeting.getId()) == null);
+		}
+		
+		//assertTrue(m_cmApp.getFutureMeeting(meeting_id * 100 + 1) == null);
+	}
 }
