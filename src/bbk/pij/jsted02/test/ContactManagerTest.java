@@ -258,4 +258,22 @@ public class ContactManagerTest {
 		date.set(Calendar.YEAR, 2008);
 		m_cmApp.addNewPastMeeting(contacts, date, null);
 	}
+	
+	@Test
+	public void checkGetContacts()
+	{
+		assertTrue(m_cmApp.getContacts("Test").size() == 2);
+		assertTrue(m_cmApp.getContacts("Test1").size() == 1);
+		assertTrue(m_cmApp.getContacts("RANDOM1").size() == 0);
+		}
+	
+	//@Test(expected=IllegalArgumentException.class)
+	@Test(expected=NullPointerException.class)
+	public void getContactsNameNull()
+	{
+		String name = null;
+		m_cmApp.getContacts(name);
+	}
+	
+	
 }

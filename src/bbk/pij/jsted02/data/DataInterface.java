@@ -131,6 +131,13 @@ public class DataInterface {
 		return returnedContacts;
 	}
 	
+	public List<Contact> getAllContacts()
+	{
+		@SuppressWarnings("unchecked")
+		List<Contact> contacts = new ArrayList<Contact>((Collection<? extends Contact>) this.m_data.get(DataType.CONTACT));
+		return contacts;
+	}
+	
 	/**
 	 * Get contact method, returns the contact if it matches the name of a
 	 *  contact in the data store, otherwise returns null.
@@ -208,10 +215,6 @@ public class DataInterface {
 
 	public ArrayList<Object> getAllMeetings() {
 		return m_data.get(DataType.MEETING);
-	}
-
-	public Set<Contact> getAllContacts(){
-		return new HashSet<Contact>((Collection<? extends Contact>) this.m_data.get(DataType.CONTACT));
 	}
 
 	public List<Meeting> getAllFutureMeetings() {

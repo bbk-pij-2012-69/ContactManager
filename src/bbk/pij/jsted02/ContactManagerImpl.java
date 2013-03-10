@@ -314,7 +314,23 @@ public class ContactManagerImpl implements ContactManager {
 	@Override
 	public Set<Contact> getContacts(String name)
 	{
-		return new HashSet<Contact>((Collection<? extends Contact>) m_dataInterface.getContacts(name));
+		if(name == null)
+		{
+			throw new NullPointerException("Name cannot be null");
+		}
+		
+		List<Contact> contactsList = m_dataInterface.getAllContacts();
+		Set<Contact> returnContacts = new HashSet<Contact>();
+		for(Contact contact: contactsList)
+		{
+			if(contact.getName().contains(name))
+			{
+				returnContacts.add(contact);
+			}
+		}
+		
+		
+		return returnContacts;
 	}
 
 	/**
