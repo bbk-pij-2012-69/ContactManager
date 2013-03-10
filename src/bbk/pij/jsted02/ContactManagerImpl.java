@@ -170,7 +170,31 @@ public class ContactManagerImpl implements ContactManager {
 		return returned_meetings;
 	}
 
-	private void checkContact(Contact contact)
+	
+	/**
+	 * Checks if all contacts are present in the data set, if not it
+	 * throws an IllegalArgumentException.
+	 * 
+	 * @param set of contacts to check
+	 * @throws IllegalArgumentException
+	 */
+	private void checkContacts(Set<Contact> contacts) throws IllegalArgumentException
+	{
+		// Iterate over contacts and call checkContact on each one
+		for(Contact contact: contacts)
+		{
+			checkContact(contact);
+		}
+	}
+
+	/**
+	 * Checks if an individual contact is present in the data set, if not it
+	 * throws an IllegalArgumentException.
+	 * 
+	 * @param contact to check
+	 * @throws IllegalArgumentException
+	 */
+	private void checkContact(Contact contact) throws IllegalArgumentException
 	{
 		// If the size of the contacts list returned when we pass in the
 		//  contact id is 0 then the contact must not exist and we throw
@@ -228,6 +252,20 @@ public class ContactManagerImpl implements ContactManager {
 	public void addNewPastMeeting(Set<Contact> contacts, Calendar date,
 			String text)
 	{
+		// Check if any of the inputs are null
+		if(contacts == null || date == null || text == null)
+		{
+			throw new NullPointerException("None of the values should be null");
+		}
+		// Check if the contacts set is empty
+		else if(contacts.size() == 0)
+		{
+			throw new IllegalArgumentException("Contacts should not be empty");
+		}
+		
+		// Run checkContacts on the set of contacts
+		checkContacts(contacts);
+		
 		// Create a new meeting, set the various attributes and add to the data
 		//  interface
 		PastMeetingImpl meeting = new PastMeetingImpl();
