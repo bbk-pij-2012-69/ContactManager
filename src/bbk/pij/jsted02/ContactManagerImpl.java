@@ -5,7 +5,6 @@ package bbk.pij.jsted02;
 
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
@@ -29,7 +28,7 @@ public class ContactManagerImpl implements ContactManager {
 	 * initialised flag is set to true once the system has initialised and is
 	 * ready to be used.
 	 */
-	
+
 	private boolean m_initialised;
 	/**
 	 * DataInterface variable, this will provide the data used in the system.
@@ -43,7 +42,7 @@ public class ContactManagerImpl implements ContactManager {
 	{
 		init(false);
 	}
-	
+
 	/**
 	 * Constructor, runs initialisation code to initialise the system.
 	 */
@@ -51,7 +50,7 @@ public class ContactManagerImpl implements ContactManager {
 	{
 		init(test);
 	}
-	
+
 	/**
 	 * Method to get an array of id's from the provided set of contacts.
 	 * 
@@ -63,17 +62,17 @@ public class ContactManagerImpl implements ContactManager {
 		// Initialise a counter and array that will be returned
 		int count = 0;
 		int[] ids = new int[contacts.size()];
-		
+
 		// Iterate over each contact, add id to the array and increment the 
 		//  count
 		for(Contact contact : contacts)
 		{
 			ids[count++] = contact.getId();
 		}
-		
+
 		return ids;
 	}
-	
+
 	/**
 	 * @see bbk.pij.jsted02.interfaces.ContactManager#addFutureMeeting(java.util.Set, java.util.Calendar)
 	 */
@@ -82,7 +81,7 @@ public class ContactManagerImpl implements ContactManager {
 	{
 		// Using the getContactId's method get all known contacts from the data
 		Set<Contact> foundContacts = getContacts(getContactIds(contacts));
-		
+
 		// Check if the no. of contacts provided matches the number of contacts
 		//  found in the data, if not throw an exception
 		if(contacts.size() != foundContacts.size())
@@ -117,7 +116,7 @@ public class ContactManagerImpl implements ContactManager {
 		{
 			throw new IllegalArgumentException("Invalid meeting id - is associated with FutureMeeting.");
 		}
-		
+
 		return (PastMeeting) meeting;
 	}
 
@@ -153,7 +152,7 @@ public class ContactManagerImpl implements ContactManager {
 		//  the filtered meetings
 		List<Meeting> meetings = m_dataInterface.getAllFutureMeetings();
 		List<Meeting> returned_meetings = new ArrayList<Meeting>();
-		
+
 		// Iterate over the meetings and check the contacts exist for that
 		//  meeting, if he does then append the meeting to the filtered list
 		for(Meeting meeting: meetings)
@@ -170,7 +169,7 @@ public class ContactManagerImpl implements ContactManager {
 		return returned_meetings;
 	}
 
-	
+
 	/**
 	 * Checks if all contacts are present in the data set, if not it
 	 * throws an IllegalArgumentException.
@@ -219,16 +218,16 @@ public class ContactManagerImpl implements ContactManager {
 	@Override
 	public List<PastMeeting> getPastMeetingList(Contact contact)
 	{
-		
+
 		// Call checkContact method, throws and IllegalArgument if the contact 
 		//  does not exist
 		checkContact(contact);
-		
+
 		// Get the full list of past meetings and create a new list to store
 		//  the filtered meetings
 		List<Meeting> meetings = m_dataInterface.getAllPastMeetings();
 		List<PastMeeting> returned_meetings = new ArrayList<PastMeeting>();
-		
+
 		// Iterate over the meetings and check the contacts exist for that
 		//  meeting, if he does then append the meeting to the filtered list
 		for(Object meeting: meetings)
@@ -238,7 +237,7 @@ public class ContactManagerImpl implements ContactManager {
 				returned_meetings.add((PastMeeting) meeting);
 			}
 		}
-		
+
 		// Sort using the Meeting date descending comparator and return
 		Collections.sort(returned_meetings, MeetingImpl.COMPARATOR_DATE_DSC);
 
@@ -262,10 +261,10 @@ public class ContactManagerImpl implements ContactManager {
 		{
 			throw new IllegalArgumentException("Contacts should not be empty");
 		}
-		
+
 		// Run checkContacts on the set of contacts
 		checkContacts(contacts);
-		
+
 		// Create a new meeting, set the various attributes and add to the data
 		//  interface
 		PastMeetingImpl meeting = new PastMeetingImpl();
@@ -291,6 +290,11 @@ public class ContactManagerImpl implements ContactManager {
 	 */
 	@Override
 	public void addNewContact(String name, String notes) {
+		if(name == null || notes == null)
+		{
+			throw new NullPointerException("Both name and notes must be set, null value found");
+		}
+		
 		// Create contact, set name and notes and add contact to the
 		//  data interface
 		ContactImpl contact = new ContactImpl();
@@ -305,7 +309,32 @@ public class ContactManagerImpl implements ContactManager {
 	@Override
 	public Set<Contact> getContacts(int... ids)
 	{
-		return new HashSet<Contact>((Collection<? extends Contact>) m_dataInterface.getContacts(ids));
+		// Create list of all contacts and a new set for the returned contacts
+		List<Contact> contactsList = m_dataInterface.getAllContacts();
+
+		Set<Contact> returnContacts = new HashSet<Contact>();
+
+		for(int i = 0; i < ids.length; ++i)
+		{
+			boolean missing = true;
+			for(Contact contact: contactsList)
+			{	
+
+				if(ids[i] == contact.getId())
+				{
+					missing = false;
+					returnContacts.add(contact);
+					break;
+				}
+			}
+
+			if(missing)
+			{
+				throw new IllegalArgumentException("Contact does not exist.");
+			}
+		}
+
+		return returnContacts;
 	}
 
 	/**
@@ -314,22 +343,22 @@ public class ContactManagerImpl implements ContactManager {
 	@Override
 	public Set<Contact> getContacts(String name)
 	{
-		if(name == null)
-		{
-			throw new NullPointerException("Name cannot be null");
-		}
-		
+
+		// Create list of all contacts and a new set for the returned contacts
 		List<Contact> contactsList = m_dataInterface.getAllContacts();
 		Set<Contact> returnContacts = new HashSet<Contact>();
+
+		//Iterate over each contact
 		for(Contact contact: contactsList)
 		{
+			// Check if the name contains the string specified
+			// Will naturally thrown if null
 			if(contact.getName().contains(name))
 			{
 				returnContacts.add(contact);
 			}
 		}
-		
-		
+
 		return returnContacts;
 	}
 
@@ -340,7 +369,7 @@ public class ContactManagerImpl implements ContactManager {
 	public void flush() {
 		m_dataInterface.flush();
 	}
-	
+
 	/**
 	 * Initialise function, will load contacts data into memory and prepare
 	 *  system for use.
@@ -351,7 +380,7 @@ public class ContactManagerImpl implements ContactManager {
 		m_dataInterface = new DataInterface();
 		m_initialised = true;
 	}
-	
+
 	/**
 	 * Finalise function, will call flush to save to disk and make sure that
 	 *  everything is ok to shutdown the system.

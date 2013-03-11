@@ -260,19 +260,79 @@ public class ContactManagerTest {
 	}
 	
 	@Test
-	public void checkGetContacts()
+	public void checkGetContactsName()
 	{
 		assertTrue(m_cmApp.getContacts("Test").size() == 2);
 		assertTrue(m_cmApp.getContacts("Test1").size() == 1);
 		assertTrue(m_cmApp.getContacts("RANDOM1").size() == 0);
 		}
 	
-	//@Test(expected=IllegalArgumentException.class)
 	@Test(expected=NullPointerException.class)
 	public void getContactsNameNull()
 	{
 		String name = null;
 		m_cmApp.getContacts(name);
+	}
+	
+	
+	@Test
+	public void checkGetContactsID()
+	{
+		Set<Contact> contacts = m_cmApp.getContacts("Test");
+		int[] ids = new int[contacts.size()];
+		for(Contact contact: contacts)
+		{
+			assertTrue(m_cmApp.getContacts(contact.getId()).size() == 1);
+			assertTrue(m_cmApp.getContacts(contact.getId()).iterator().next().getId() == contact.getId());
+		}
+			
+		int count =0;
+		for(Contact contact: contacts)
+		{
+			ids[count++] = contact.getId();
+			
+		}	
+	
+		assertTrue(m_cmApp.getContacts(ids).size() == ids.length);
+	}
+	
+	@Test(expected=IllegalArgumentException.class)
+	public void getContactsIDNotPresent()
+	{
+		m_cmApp.getContacts(5);
+	}
+	
+	@Test
+	public void checkNewContactAdded()
+	{
+		m_cmApp.addNewContact("NewContact1", "New Contact 1");
+		assertTrue(m_cmApp.getContacts("NewContact").size() == 1);
+		
+	}
+	
+	@Test(expected=NullPointerException.class)
+	public void addContactNullFields()
+	{
+		String name = null;
+		String notes = null;
+		m_cmApp.addNewContact(name, notes);
+	}
+	
+	
+	@Test(expected=NullPointerException.class)
+	public void addContactNullNameField()
+	{
+		String name = null;
+		String notes = "SomeNotes";
+		m_cmApp.addNewContact(name, notes);
+	}
+	
+	@Test(expected=NullPointerException.class)
+	public void addContactNullNoteFields()
+	{
+		String name = "SomeName";
+		String notes = null;
+		m_cmApp.addNewContact(name, notes);
 	}
 	
 	
