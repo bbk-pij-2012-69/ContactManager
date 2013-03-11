@@ -335,5 +335,46 @@ public class ContactManagerTest {
 		m_cmApp.addNewContact(name, notes);
 	}
 	
+	@Test
+	public void checkGetFutureMeetingListDate()
+	{
+		Calendar setDate = Calendar.getInstance();
+		setDate.set(2025, 8, 31, 12, 0);
+
+		Set<Contact> contacts = m_cmApp.getContacts("Test");
+		
+		m_cmApp.addFutureMeeting(contacts, setDate);
+		
+		Calendar checkDate = Calendar.getInstance();
+		checkDate.set(2025, 8, 31, 0, 0);
+		assertTrue(m_cmApp.getFutureMeetingList(checkDate).size() == 1);
+	}
+	
+	@Test
+	public void checkGetFutureMeetingListDateFutOrder()
+	{
+		Set<Contact> contacts = m_cmApp.getContacts("Test");
+
+		Calendar setDate = Calendar.getInstance();
+		setDate.set(2025, 5, 15, 11, 30);
+		m_cmApp.addFutureMeeting(contacts, setDate);
+		
+
+		setDate.set(2025, 5, 15, 13, 30);
+		m_cmApp.addFutureMeeting(contacts, setDate);
+
+		setDate.set(2025, 5, 15, 15, 30);
+		m_cmApp.addFutureMeeting(contacts, setDate);
+
+		Calendar checkDate = Calendar.getInstance();
+		checkDate.set(2025, 5, 15, 0, 0);
+
+		List<Meeting> meetings =m_cmApp.getFutureMeetingList(checkDate);
+		assertTrue(meetings.size() == 3);
+		
+		assertTrue(meetings.get(0).getDate().compareTo(meetings.get(1).getDate()) < 0 );
+		assertTrue(meetings.get(1).getDate().compareTo(meetings.get(2).getDate()) < 0 );
+	}
+	
 	
 }

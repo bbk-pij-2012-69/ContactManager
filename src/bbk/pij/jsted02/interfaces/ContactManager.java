@@ -49,13 +49,11 @@ public interface ContactManager {
 	 * the list will be chronologically sorted and will not contain any
 	 * duplicates.
 	 *
-	 * @param contact one of the user’s contacts
+	 * @param contact one of the userï¿½s contacts
 	 * @return the list of future meeting(s) scheduled with this contact (maybe empty).
 	 * @throws IllegalArgumentException if the contact does not exist
 	 */
 	List<Meeting> getFutureMeetingList(Contact contact);
-
-	//TODO: Inconsistent?
 	/**
 	 * Returns the list of meetings that are scheduled for, or that took
 	 * place on, the specified date
@@ -75,7 +73,7 @@ public interface ContactManager {
 	 * the list will be chronologically sorted and will not contain any
 	 * duplicates.
 	 *
-	 * @param contact one of the user’s contacts
+	 * @param contact one of the userï¿½s contacts
 	 * @return the list of future meeting(s) scheduled with this contact (maybe empty).
 	 * @throws IllegalArgumentException if the contact does not exist
 	 */
