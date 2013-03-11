@@ -20,7 +20,7 @@ public class ContactTest {
 	 * Initialisation method, sets up a list of contacts to use in the tests.
 	 */
 	@BeforeClass
-	public void setUp()
+	public static void setUp()
 	{
 		m_contacts = TestHelper.generateContacts(10, 100);
 	}
@@ -29,7 +29,7 @@ public class ContactTest {
 	 * Finalise method, tears down anything that does not need to persist.
 	 */
 	@AfterClass
-	public void tearDown()
+	public static void tearDown()
 	{
 	}
 

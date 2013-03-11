@@ -209,7 +209,32 @@ public class ContactManagerImpl implements ContactManager {
 	@Override
 	public List<Meeting> getFutureMeetingList(Calendar date)
 	{
-		return m_dataInterface.getFutureMeetingList(date);
+		List<Object> allMeetings = m_dataInterface.getAllMeetings();
+		List<Meeting> filteredMeetings = new ArrayList<Meeting>();
+		Calendar compareDate = Calendar.getInstance();
+		compareDate.clear();
+		compareDate.set(date.get(Calendar.YEAR), date.get(Calendar.MONTH), date.get(Calendar.DATE));
+
+		for(Object meeting: allMeetings)
+		{
+			Calendar meetingDate = Calendar.getInstance();
+			meetingDate.clear();
+			meetingDate.set(((Meeting)meeting).getDate().get(Calendar.YEAR), ((Meeting)meeting).getDate().get(Calendar.MONTH), ((Meeting)meeting).getDate().get(Calendar.DATE));
+			if(compareDate.compareTo(meetingDate) == 0)
+			{
+				filteredMeetings.add((Meeting) meeting);
+			}
+		}
+
+		if(Calendar.getInstance().compareTo(compareDate) == -1)
+		{
+			Collections.sort(filteredMeetings, MeetingImpl.COMPARATOR_DATE_ASC);
+		}
+		else
+		{
+			Collections.sort(filteredMeetings, MeetingImpl.COMPARATOR_DATE_DSC);
+		}
+		return filteredMeetings;
 	}
 
 	/**
@@ -294,7 +319,7 @@ public class ContactManagerImpl implements ContactManager {
 		{
 			throw new NullPointerException("Both name and notes must be set, null value found");
 		}
-		
+
 		// Create contact, set name and notes and add contact to the
 		//  data interface
 		ContactImpl contact = new ContactImpl();

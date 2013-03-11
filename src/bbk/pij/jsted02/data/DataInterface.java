@@ -230,11 +230,6 @@ public class DataInterface {
 		return future_meetings;
 	}
 
-	public List<Meeting> getFutureMeetingList(Calendar date) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
 	public void updMeeting(Meeting meeting) {
 		// TODO Auto-generated method stub
 		

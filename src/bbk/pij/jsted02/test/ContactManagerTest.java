@@ -1,6 +1,7 @@
 package bbk.pij.jsted02.test;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 import java.util.Calendar;
 import java.util.HashSet;
@@ -155,7 +156,7 @@ public class ContactManagerTest {
 		assertTrue(m_cmApp.getMeeting(3) instanceof FutureMeetingImpl);
 		assertTrue(m_cmApp.getMeeting(4) instanceof PastMeetingImpl);
 		assertTrue(m_cmApp.getMeeting(5) instanceof PastMeetingImpl);
-		assertTrue(m_cmApp.getMeeting(6) == null);
+		assertTrue(m_cmApp.getMeeting(25) == null);
 	}
 
 	@Test
@@ -347,7 +348,8 @@ public class ContactManagerTest {
 		
 		Calendar checkDate = Calendar.getInstance();
 		checkDate.set(2025, 8, 31, 0, 0);
-		assertTrue(m_cmApp.getFutureMeetingList(checkDate).size() == 1);
+		List<Meeting> meetings = m_cmApp.getFutureMeetingList(checkDate);
+		assertTrue("Expected 1 meeting, got " + meetings.size(), meetings.size() == 1);
 	}
 	
 	@Test
@@ -357,21 +359,25 @@ public class ContactManagerTest {
 
 		Calendar setDate = Calendar.getInstance();
 		setDate.set(2025, 5, 15, 11, 30);
-		m_cmApp.addFutureMeeting(contacts, setDate);
-		
+		m_cmApp.addFutureMeeting(contacts, (Calendar) setDate.clone());
 
 		setDate.set(2025, 5, 15, 13, 30);
-		m_cmApp.addFutureMeeting(contacts, setDate);
+		m_cmApp.addFutureMeeting(contacts, (Calendar) setDate.clone());
 
 		setDate.set(2025, 5, 15, 15, 30);
-		m_cmApp.addFutureMeeting(contacts, setDate);
+		m_cmApp.addFutureMeeting(contacts, (Calendar) setDate.clone());
 
 		Calendar checkDate = Calendar.getInstance();
 		checkDate.set(2025, 5, 15, 0, 0);
 
 		List<Meeting> meetings =m_cmApp.getFutureMeetingList(checkDate);
 		assertTrue(meetings.size() == 3);
-		
+
+		System.out.println(meetings.get(0).getDate().getTime());
+		System.out.println(meetings.get(0).getDate().compareTo(meetings.get(1).getDate()));
+		System.out.println(meetings.get(1).getDate().getTime());
+		System.out.println(meetings.get(1).getDate().compareTo(meetings.get(2).getDate()));
+		System.out.println(meetings.get(2).getDate().getTime());
 		assertTrue(meetings.get(0).getDate().compareTo(meetings.get(1).getDate()) < 0 );
 		assertTrue(meetings.get(1).getDate().compareTo(meetings.get(2).getDate()) < 0 );
 	}
