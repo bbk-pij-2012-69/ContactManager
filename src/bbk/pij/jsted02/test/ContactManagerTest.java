@@ -373,11 +373,6 @@ public class ContactManagerTest {
 		List<Meeting> meetings =m_cmApp.getFutureMeetingList(checkDate);
 		assertTrue(meetings.size() == 3);
 
-		System.out.println(meetings.get(0).getDate().getTime());
-		System.out.println(meetings.get(0).getDate().compareTo(meetings.get(1).getDate()));
-		System.out.println(meetings.get(1).getDate().getTime());
-		System.out.println(meetings.get(1).getDate().compareTo(meetings.get(2).getDate()));
-		System.out.println(meetings.get(2).getDate().getTime());
 		assertTrue(meetings.get(0).getDate().compareTo(meetings.get(1).getDate()) < 0 );
 		assertTrue(meetings.get(1).getDate().compareTo(meetings.get(2).getDate()) < 0 );
 	}

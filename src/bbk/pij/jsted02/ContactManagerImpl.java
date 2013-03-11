@@ -24,7 +24,7 @@ import bbk.pij.jsted02.meetings.PastMeetingImpl;
  * @author Luke Stedman (jsted02), MSc CS Yr1 2012/13
  */
 public class ContactManagerImpl implements ContactManager {
-	
+
 	// Members
 	/**
 	 * initialised flag is set to true once the system has initialised and is
@@ -59,6 +59,7 @@ public class ContactManagerImpl implements ContactManager {
 	// Getters/Setters
 	/**
 	 * Gets the initialised value, can only be set locally.
+	 * 
 	 * @return
 	 */
 	public boolean getInitialised() {
@@ -158,7 +159,7 @@ public class ContactManagerImpl implements ContactManager {
 	public PastMeeting getPastMeeting(int id) {
 		// Get the meeting from the data interface, check the meeting instance
 		// if a Future meeting then throw an exception
-		Meeting meeting = m_dataInterface.getPastMeeting(id);
+		Meeting meeting = m_dataInterface.getMeeting(id);
 		if (meeting instanceof FutureMeetingImpl) {
 			throw new IllegalArgumentException(
 					"Invalid meeting id - is associated with FutureMeeting.");
@@ -172,7 +173,7 @@ public class ContactManagerImpl implements ContactManager {
 	 */
 	@Override
 	public FutureMeeting getFutureMeeting(int id) {
-		return m_dataInterface.getFutureMeeting(id);
+		return (FutureMeeting) m_dataInterface.getMeeting(id);
 	}
 
 	/**
@@ -194,14 +195,15 @@ public class ContactManagerImpl implements ContactManager {
 
 		// Get the full list of future meetings and create a new list to store
 		// the filtered meetings
-		List<Meeting> meetings = m_dataInterface.getAllFutureMeetings();
+		List<Object> meetings = m_dataInterface.getAllMeetings();
 		List<Meeting> returned_meetings = new ArrayList<Meeting>();
 
 		// Iterate over the meetings and check the contacts exist for that
 		// meeting, if he does then append the meeting to the filtered list
-		for (Meeting meeting : meetings) {
-			if (meeting.getContacts().contains(contact)) {
-				returned_meetings.add(meeting);
+		for (Object meeting : meetings) {
+			if (meeting instanceof FutureMeeting
+					&& ((Meeting) meeting).getContacts().contains(contact)) {
+				returned_meetings.add((Meeting) meeting);
 			}
 		}
 
@@ -210,6 +212,7 @@ public class ContactManagerImpl implements ContactManager {
 
 		return returned_meetings;
 	}
+
 	/**
 	 * @see bbk.pij.jsted02.interfaces.ContactManager#getFutureMeetingList(java.util.Calendar)
 	 */
@@ -253,13 +256,14 @@ public class ContactManagerImpl implements ContactManager {
 
 		// Get the full list of past meetings and create a new list to store
 		// the filtered meetings
-		List<Meeting> meetings = m_dataInterface.getAllPastMeetings();
+		List<Object> meetings = m_dataInterface.getAllMeetings();
 		List<PastMeeting> returned_meetings = new ArrayList<PastMeeting>();
 
 		// Iterate over the meetings and check the contacts exist for that
 		// meeting, if he does then append the meeting to the filtered list
 		for (Object meeting : meetings) {
-			if (((Meeting) meeting).getContacts().contains(contact)) {
+			if (meeting instanceof PastMeeting
+					&& ((Meeting) meeting).getContacts().contains(contact)) {
 				returned_meetings.add((PastMeeting) meeting);
 			}
 		}
@@ -306,7 +310,9 @@ public class ContactManagerImpl implements ContactManager {
 	public void addMeetingNotes(int id, String text) {
 		MeetingImpl meeting = (MeetingImpl) m_dataInterface.getMeeting(id);
 		meeting.addNotes(text);
-		m_dataInterface.updMeeting(meeting);
+		
+		//TODO: Add functionality
+		//m_dataInterface.updMeeting(meeting);
 	}
 
 	/**
