@@ -57,11 +57,16 @@ public class DataSerialiser {
 	 * @param Name of file that will store the data.
 	 * 
 	 */
-	public DataSerialiser(String fileName)
+	public DataSerialiser(String fileName, boolean test)
 	{
 		// Set the filename and infer the file object path from the provided
 		//  filename.
 		this.m_fileName = fileName;
+		if(test)
+		{
+			m_fileName = "test_" + m_fileName;
+		}
+		
 		this.m_file = new File(Paths.get(".", this.m_folderName, this.m_fileName).toString());
 
 		// Initialise the data object (this will be written to file the first 

@@ -7,13 +7,9 @@
 package bbk.pij.jsted02.data;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
-
 import bbk.pij.jsted02.ContactImpl;
 import bbk.pij.jsted02.interfaces.Contact;
 import bbk.pij.jsted02.interfaces.FutureMeeting;
@@ -40,7 +36,7 @@ public class DataInterface {
 	/**
 	 * Serialiser object which will be used to load and save data to/from disk.
 	 */
-	private DataSerialiser m_serialiser = new DataSerialiser(FILE_NAME);
+	private DataSerialiser m_serialiser;
 
 	/**
 	 * Data store, hash containing enum reference to data and array list of
@@ -52,8 +48,9 @@ public class DataInterface {
 	 * Constructs DataInterface, gets the data from the serialiser and stores
 	 *  it for use by the ContactManager. 
 	 */
-	public DataInterface()
+	public DataInterface(boolean test)
 	{
+		m_serialiser =  new DataSerialiser(FILE_NAME, test);
 		this.m_data = m_serialiser.getData();
 	}
 
