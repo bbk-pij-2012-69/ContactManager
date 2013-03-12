@@ -377,5 +377,37 @@ public class ContactManagerTest {
 		assertTrue(meetings.get(1).getDate().compareTo(meetings.get(2).getDate()) < 0 );
 	}
 	
+	@Test(expected=IllegalArgumentException.class)
+	public void checkAddMeetingNotesInvalidId()
+	{
+		String text = "Test Notes";
+		m_cmApp.addMeetingNotes(54321, text);
+	}
+	
+	@Test(expected=IllegalStateException.class)
+	public void checkAddMeetingNotesFutureMeeting()
+	{
+		Set<Contact> contacts = m_cmApp.getContacts("Test1");
+
+		List<Meeting> meetings = m_cmApp.getFutureMeetingList(contacts.iterator().next());
+
+		int id = meetings.get(0).getId();
+		String text = "Test Notes";
+		m_cmApp.addMeetingNotes(id, text);
+	}
+	
+
+	@Test(expected=NullPointerException.class)
+	public void checkAddMeetingNotesNullNotes()
+	{
+		Set<Contact> contacts = m_cmApp.getContacts("Test1");
+
+		List<PastMeeting> meetings = m_cmApp.getPastMeetingList(contacts.iterator().next());
+
+		int id = meetings.get(0).getId();
+		String text = null;
+		m_cmApp.addMeetingNotes(id, text);
+	}
+	
 	
 }

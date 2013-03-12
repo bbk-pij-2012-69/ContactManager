@@ -310,9 +310,9 @@ public class ContactManagerImpl implements ContactManager {
 	public void addMeetingNotes(int id, String text) {
 		MeetingImpl meeting = (MeetingImpl) m_dataInterface.getMeeting(id);
 		meeting.addNotes(text);
-		
-		//TODO: Add functionality
-		//m_dataInterface.updMeeting(meeting);
+
+		// TODO: Add functionality
+		// m_dataInterface.updMeeting(meeting);
 	}
 
 	/**

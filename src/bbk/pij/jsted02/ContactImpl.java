@@ -11,6 +11,7 @@ import bbk.pij.jsted02.interfaces.Contact;
  */
 public class ContactImpl implements Contact {
 
+	// Members
 	/**
 	 * Static ID increments when each Contact is created.
 	 */
@@ -29,102 +30,85 @@ public class ContactImpl implements Contact {
 	 */
 	private int m_id;
 
+	// Constructor
 	/**
 	 * Empty constructor for serialisation
 	 */
-	public ContactImpl()
-	{
+	public ContactImpl() {
 		setId(ContactImpl.contact_count++);
 	}
 
-	/* (non-Javadoc)
-	 * @see bbk.pij.jsted02.interfaces.Contact#getId()
-	 */
-	@Override
-	public int getId()
-	{
-		return m_id;
-	}
-
-	/* (non-Javadoc)
-	 * @see bbk.pij.jsted02.interfaces.Contact#getName()
-	 */
-	@Override
-	public String getName()
-	{
-		return m_name;
-	}
-
+	// Setters
 	/**
 	 * Sets the name of the contact
 	 * 
-	 * @param name Name of Contact
+	 * @param name
+	 *            Name of Contact
 	 */
-	public void setName(String name)
-	{
+	public void setName(String name) {
 		m_name = name;
 	}
 
 	/**
 	 * Sets the id of the contact
 	 * 
-	 * @param integer id of Contact
+	 * @param id
+	 *            Integer id of Contact
 	 */
-	private void setId(int id)
-	{
+	private void setId(int id) {
 		m_id = id;
-	}
-
-	
-	/* (non-Javadoc)
-	 * @see bbk.pij.jsted02.interfaces.Contact#getNotes()
-	 */
-	@Override
-	public String getNotes()
-	{
-		return m_notes;
-	}
-
-	/* (non-Javadoc)
-	 * @see bbk.pij.jsted02.interfaces.Contact#addNotes(java.lang.String)
-	 */
-	@Override
-	public void addNotes(String note)
-	{
-		// Append note to list.
-		if(m_notes.length() != 0)
-			m_notes += "\n";
-		m_notes += note.replace("\n",  "").replace("\r", "");
 	}
 
 	/**
 	 * Public Setter for serialisation
 	 * 
-	 * @param note to be added to the notes string.
+	 * @param note
+	 *            Note to be added to the notes string.
 	 */
-	public void setNotes(String note)
-	{
+	public void setNotes(String note) {
 		addNotes(note);
 	}
 
-	/**
-	 * Prints out information about the contact in a user readable format
+	/*
+	 * (non-Javadoc)
 	 * 
-	 * @return Returns string of contact information.
+	 * @see bbk.pij.jsted02.interfaces.Contact#getId()
 	 */
-	public String toString()
-	{
-		StringBuilder sb = new StringBuilder();
-		sb.append("ID: " + m_id + "\n");
-		sb.append("Name: " + m_name + "\n");
-		if(m_notes.length() > 0)
-		{
-			sb.append("\n");
-			sb.append("Notes:");
-			sb.append(m_notes);
-			sb.append("\n");
-		}
-		return sb.toString();
+	@Override
+	public int getId() {
+		return m_id;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see bbk.pij.jsted02.interfaces.Contact#getName()
+	 */
+	@Override
+	public String getName() {
+		return m_name;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see bbk.pij.jsted02.interfaces.Contact#getNotes()
+	 */
+	@Override
+	public String getNotes() {
+		return m_notes;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see bbk.pij.jsted02.interfaces.Contact#addNotes(java.lang.String)
+	 */
+	@Override
+	public void addNotes(String note) {
+		// Append note to list.
+		if (m_notes.length() != 0)
+			m_notes += "\n";
+		m_notes += note.replace("\n", "").replace("\r", "");
+	}
 }
