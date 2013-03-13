@@ -388,12 +388,11 @@ public class ContactManagerTest {
 	public void checkAddMeetingNotesFutureMeeting()
 	{
 		Set<Contact> contacts = m_cmApp.getContacts("Test1");
-
-		List<Meeting> meetings = m_cmApp.getFutureMeetingList(contacts.iterator().next());
-
-		int id = meetings.get(0).getId();
+		Calendar date = Calendar.getInstance();
+		date.add(Calendar.HOUR, 5);
+		int meeting_id = m_cmApp.addFutureMeeting(contacts, date);
 		String text = "Test Notes";
-		m_cmApp.addMeetingNotes(id, text);
+		m_cmApp.addMeetingNotes(meeting_id, text);
 	}
 	
 
@@ -409,5 +408,38 @@ public class ContactManagerTest {
 		m_cmApp.addMeetingNotes(id, text);
 	}
 	
+	@Test
+	public void checkAddMeetingNotesFutureConversion()
+	{
+		Set<Contact> contacts = m_cmApp.getContacts("Test1");
+		Calendar date = Calendar.getInstance();
+		date.add(Calendar.HOUR, 1);
+		int meeting_id = m_cmApp.addFutureMeeting(contacts, date);
+
+		date.add(Calendar.HOUR, -2);
+		
+		m_cmApp.addMeetingNotes(meeting_id, "Meeting completed...");
+		
+		assertTrue(m_cmApp.getMeeting(meeting_id) instanceof PastMeetingImpl);
+	}
+	
+	@Test
+	public void checkAddMeetingNotes()
+	{
+		Set<Contact> contacts = m_cmApp.getContacts("Test1");
+		Calendar date = Calendar.getInstance();
+		date.add(Calendar.DATE, -20);
+		int meeting_id = m_cmApp.getPastMeetingList(contacts.iterator().next()).get(0).getId();
+		PastMeeting meeting = (PastMeeting) m_cmApp.getMeeting(meeting_id);
+
+		assertTrue(meeting instanceof PastMeetingImpl);
+		
+		String old_notes = meeting.getNotes();
+		m_cmApp.addMeetingNotes(meeting_id, "Meeting completed...");
+		meeting = (PastMeeting) m_cmApp.getMeeting(meeting_id);
+		
+		assertFalse(old_notes.equals(meeting.getNotes()));
+		
+	}
 	
 }

@@ -195,22 +195,22 @@ public class ContactManagerImpl implements ContactManager {
 
 		// Get the full list of future meetings and create a new list to store
 		// the filtered meetings
-		List<Object> meetings = m_dataInterface.getAllMeetings();
-		List<Meeting> returned_meetings = new ArrayList<Meeting>();
+		List<Meeting> allMeetings = m_dataInterface.getAllMeetings();
+		List<Meeting> returnedMeetings = new ArrayList<Meeting>();
 
 		// Iterate over the meetings and check the contacts exist for that
 		// meeting, if he does then append the meeting to the filtered list
-		for (Object meeting : meetings) {
+		for (Object meeting : allMeetings) {
 			if (meeting instanceof FutureMeeting
 					&& ((Meeting) meeting).getContacts().contains(contact)) {
-				returned_meetings.add((Meeting) meeting);
+				returnedMeetings.add((Meeting) meeting);
 			}
 		}
 
 		// Sort using the Meeting date ascending comparator and return
-		Collections.sort(returned_meetings, MeetingImpl.COMPARATOR_DATE_ASC);
+		Collections.sort(returnedMeetings, MeetingImpl.COMPARATOR_DATE_ASC);
 
-		return returned_meetings;
+		return returnedMeetings;
 	}
 
 	/**
@@ -218,8 +218,8 @@ public class ContactManagerImpl implements ContactManager {
 	 */
 	@Override
 	public List<Meeting> getFutureMeetingList(Calendar date) {
-		List<Object> allMeetings = m_dataInterface.getAllMeetings();
-		List<Meeting> filteredMeetings = new ArrayList<Meeting>();
+		List<Meeting> allMeetings = m_dataInterface.getAllMeetings();
+		List<Meeting> returnedMeetings = new ArrayList<Meeting>();
 		Calendar compareDate = Calendar.getInstance();
 		compareDate.clear();
 		compareDate.set(date.get(Calendar.YEAR), date.get(Calendar.MONTH),
@@ -232,16 +232,16 @@ public class ContactManagerImpl implements ContactManager {
 					((Meeting) meeting).getDate().get(Calendar.MONTH),
 					((Meeting) meeting).getDate().get(Calendar.DATE));
 			if (compareDate.compareTo(meetingDate) == 0) {
-				filteredMeetings.add((Meeting) meeting);
+				returnedMeetings.add((Meeting) meeting);
 			}
 		}
 
 		if (Calendar.getInstance().compareTo(compareDate) == -1) {
-			Collections.sort(filteredMeetings, MeetingImpl.COMPARATOR_DATE_ASC);
+			Collections.sort(returnedMeetings, MeetingImpl.COMPARATOR_DATE_ASC);
 		} else {
-			Collections.sort(filteredMeetings, MeetingImpl.COMPARATOR_DATE_DSC);
+			Collections.sort(returnedMeetings, MeetingImpl.COMPARATOR_DATE_DSC);
 		}
-		return filteredMeetings;
+		return returnedMeetings;
 	}
 
 	/**
@@ -256,22 +256,22 @@ public class ContactManagerImpl implements ContactManager {
 
 		// Get the full list of past meetings and create a new list to store
 		// the filtered meetings
-		List<Object> meetings = m_dataInterface.getAllMeetings();
-		List<PastMeeting> returned_meetings = new ArrayList<PastMeeting>();
+		List<Meeting> allMeetings = m_dataInterface.getAllMeetings();
+		List<PastMeeting> returnedMeetings = new ArrayList<PastMeeting>();
 
 		// Iterate over the meetings and check the contacts exist for that
 		// meeting, if he does then append the meeting to the filtered list
-		for (Object meeting : meetings) {
+		for (Object meeting : allMeetings) {
 			if (meeting instanceof PastMeeting
 					&& ((Meeting) meeting).getContacts().contains(contact)) {
-				returned_meetings.add((PastMeeting) meeting);
+				returnedMeetings.add((PastMeeting) meeting);
 			}
 		}
 
 		// Sort using the Meeting date descending comparator and return
-		Collections.sort(returned_meetings, MeetingImpl.COMPARATOR_DATE_DSC);
+		Collections.sort(returnedMeetings, MeetingImpl.COMPARATOR_DATE_DSC);
 
-		return returned_meetings;
+		return returnedMeetings;
 	}
 
 	/**
@@ -308,8 +308,32 @@ public class ContactManagerImpl implements ContactManager {
 	 */
 	@Override
 	public void addMeetingNotes(int id, String text) {
-		MeetingImpl meeting = (MeetingImpl) m_dataInterface.getMeeting(id);
-		meeting.addNotes(text);
+		
+		if (text == null)
+		{
+			throw new NullPointerException("Text must be set to a non-null value.");
+		}
+		
+		Meeting meeting = m_dataInterface.getMeeting(id);
+		if(meeting == null)
+		{
+			throw new IllegalArgumentException("Invalid meeting id supplied, meeting does not exist.");
+		}
+		
+		boolean futureMeeting = meeting.getDate().compareTo(Calendar.getInstance()) > 0;
+		if(meeting instanceof FutureMeetingImpl && futureMeeting)
+		{
+			throw new IllegalStateException("Meeting must be in the past.");
+		}
+		else if(futureMeeting)
+		{
+			throw new IllegalStateException("Meeting is in the future and not a FutureMeeting, invalid state.");
+		}
+		
+		String newNote = 
+		
+		PastMeetingImpl pastMeeting = (PastMeetingImpl) meeting;
+		pastMeeting.setNotes(text);
 
 		// TODO: Add functionality
 		// m_dataInterface.updMeeting(meeting);

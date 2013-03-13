@@ -3,6 +3,7 @@
  */
 package bbk.pij.jsted02.meetings;
 
+import bbk.pij.jsted02.interfaces.Meeting;
 import bbk.pij.jsted02.interfaces.PastMeeting;
 
 /**
@@ -15,6 +16,9 @@ public class PastMeetingImpl extends MeetingImpl implements PastMeeting {
 	 * String member to store notes about the meeting
 	 */
 	private String m_notes;
+
+	public PastMeetingImpl() {
+	}
 
 	// Setters
 	/**

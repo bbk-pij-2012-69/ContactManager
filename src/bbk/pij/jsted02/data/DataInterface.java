@@ -17,11 +17,11 @@ import bbk.pij.jsted02.interfaces.Meeting;
  * @author Luke Stedman (jsted02), MSc CS Yr1 2012/13
  */
 public class DataInterface {
-	
+
 	// Members
 	/**
-	 * DataType enum, allows the data to be referenced using a static set
-	 * of identifiers - MEETING and CONTACT.
+	 * DataType enum, allows the data to be referenced using a static set of
+	 * identifiers - MEETING and CONTACT.
 	 */
 	public static enum DataType {
 		MEETING, CONTACT;
@@ -48,7 +48,7 @@ public class DataInterface {
 	 * for use by the ContactManager.
 	 * 
 	 * @param test
-	 * 			Boolean to indicate whether to run in test mode or not.
+	 *            Boolean to indicate whether to run in test mode or not.
 	 */
 	public DataInterface(boolean test) {
 		m_serialiser = new DataSerialiser(FILE_NAME, test);
@@ -76,11 +76,9 @@ public class DataInterface {
 		return null;
 	}
 
-	
 	// Public interfaces.
 	/**
-	 * Get contacts method, returns a list of contacts based on the input
-	 * id's.
+	 * Get contacts method, returns a list of contacts based on the input id's.
 	 * 
 	 * @param ids
 	 *            Integer array of id's of contacts to return.
@@ -100,19 +98,6 @@ public class DataInterface {
 		}
 		// Return list
 		return returnedContacts;
-	}
-
-	/**`
-	 * Method to get all contacts in data store.
-	 * @return List of all Contact objects in the data store.
-	 */
-	public List<Contact> getAllContacts() {
-		List<Contact> contacts = new ArrayList<Contact>();
-		List<Object> returnedContacts = m_data.get(DataType.CONTACT);
-		for (Object contact : returnedContacts) {
-			contacts.add((Contact) contact);
-		}
-		return contacts;
 	}
 
 	/**
@@ -144,8 +129,10 @@ public class DataInterface {
 
 	/**
 	 * Method to get meeting object associated with specific id.
+	 * 
 	 * @param id
-	 * @return
+	 *            integer id of meeting to return
+	 * @return Meeting object associated with id or null if id not present.
 	 */
 	public Meeting getMeeting(int id) {
 		// Loop over each contact in the data store.
@@ -158,8 +145,31 @@ public class DataInterface {
 		return null;
 	}
 
-	public ArrayList<Object> getAllMeetings() {
-		return m_data.get(DataType.MEETING);
+	/**
+	 * Method to get all meetings in data store.
+	 * 
+	 * @return List of all Meeting objects in the data store.
+	 */
+	public List<Meeting> getAllMeetings() {
+		List<Meeting> meetings = new ArrayList<Meeting>();
+		List<Object> returnedContacts = m_data.get(DataType.MEETING);
+		for (Object contact : returnedContacts) {
+			meetings.add((Meeting) contact);
+		}
+		return meetings;
 	}
 
+	/**
+	 * Method to get all contacts in data store.
+	 * 
+	 * @return List of all Contact objects in the data store.
+	 */
+	public List<Contact> getAllContacts() {
+		List<Contact> contacts = new ArrayList<Contact>();
+		List<Object> returnedContacts = m_data.get(DataType.CONTACT);
+		for (Object contact : returnedContacts) {
+			contacts.add((Contact) contact);
+		}
+		return contacts;
+	}
 }
