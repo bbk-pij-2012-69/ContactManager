@@ -423,6 +423,7 @@ public class ContactManagerTest {
 		assertTrue(m_cmApp.getMeeting(meeting_id) instanceof PastMeetingImpl);
 	}
 	
+	
 	@Test
 	public void checkAddMeetingNotes()
 	{
@@ -439,7 +440,12 @@ public class ContactManagerTest {
 		meeting = (PastMeeting) m_cmApp.getMeeting(meeting_id);
 		
 		assertFalse(old_notes.equals(meeting.getNotes()));
-		
+
+		String newNote = "...really, it has been completed";
+		String newNotes = meeting.getNotes()+"\n"+newNote;
+		m_cmApp.addMeetingNotes(meeting_id, newNote);
+				
+		assertTrue("meeting notes ("+meeting.getNotes()+") do not match expected notes ("+newNotes+")",newNotes.equals(meeting.getNotes()));
 	}
 	
 }

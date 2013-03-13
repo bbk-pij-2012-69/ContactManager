@@ -17,7 +17,14 @@ public class PastMeetingImpl extends MeetingImpl implements PastMeeting {
 	 */
 	private String m_notes;
 
+	// Constructor
 	public PastMeetingImpl() {
+	}
+
+	public PastMeetingImpl(Meeting meeting) {
+		setId(meeting.getId());
+		setContacts(meeting.getContacts());
+		setDate(meeting.getDate());
 	}
 
 	// Setters

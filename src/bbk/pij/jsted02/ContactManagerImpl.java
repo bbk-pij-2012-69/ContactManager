@@ -308,35 +308,48 @@ public class ContactManagerImpl implements ContactManager {
 	 */
 	@Override
 	public void addMeetingNotes(int id, String text) {
-		
-		if (text == null)
-		{
-			throw new NullPointerException("Text must be set to a non-null value.");
-		}
-		
-		Meeting meeting = m_dataInterface.getMeeting(id);
-		if(meeting == null)
-		{
-			throw new IllegalArgumentException("Invalid meeting id supplied, meeting does not exist.");
-		}
-		
-		boolean futureMeeting = meeting.getDate().compareTo(Calendar.getInstance()) > 0;
-		if(meeting instanceof FutureMeetingImpl && futureMeeting)
-		{
-			throw new IllegalStateException("Meeting must be in the past.");
-		}
-		else if(futureMeeting)
-		{
-			throw new IllegalStateException("Meeting is in the future and not a FutureMeeting, invalid state.");
-		}
-		
-		String newNote = 
-		
-		PastMeetingImpl pastMeeting = (PastMeetingImpl) meeting;
-		pastMeeting.setNotes(text);
 
-		// TODO: Add functionality
-		// m_dataInterface.updMeeting(meeting);
+		// Get the meeting and initialise a variable for the new note
+		Meeting meeting = m_dataInterface.getMeeting(id);
+
+		// Perform Exception checks - are the text and meeting valid?
+		if (text == null) {
+			throw new NullPointerException(
+					"Text must be set to a non-null value.");
+		}
+
+		if (meeting == null) {
+			throw new IllegalArgumentException(
+					"Invalid meeting id supplied, meeting does not exist.");
+		}
+
+		// True/False if meeting is in the future.
+		boolean isFutureMeeting = meeting.getDate().compareTo(
+				Calendar.getInstance()) > 0;
+
+		// Exception check - future meetings cannot have notes added as the
+		// meeting hasn't taken place.
+		if (meeting instanceof FutureMeetingImpl && isFutureMeeting) {
+			throw new IllegalStateException("Meeting must be in the past.");
+		} else if (isFutureMeeting) {
+			throw new IllegalStateException(
+					"Meeting is in the future and not a FutureMeeting, invalid state.");
+		}
+
+		
+		// If the meeting is a past meeting then just append the notes, 
+		// otherwise we need to convert the meeting to a past meeting, update 
+		// the data store and append the notes.
+		if (meeting instanceof PastMeetingImpl) {
+			String newNote = ((PastMeeting) meeting).getNotes();
+			newNote += "\n" + text;
+			((PastMeetingImpl) meeting).setNotes(newNote);
+		} else {
+			PastMeetingImpl newMeeting = new PastMeetingImpl(meeting);
+			newMeeting.setNotes(text);
+			m_dataInterface.updMeeting(newMeeting);
+		}
+
 	}
 
 	/**

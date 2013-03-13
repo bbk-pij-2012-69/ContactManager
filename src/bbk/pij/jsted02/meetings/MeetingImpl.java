@@ -75,7 +75,7 @@ public class MeetingImpl implements Meeting {
 	 * @param integer
 	 *            id to set.
 	 */
-	private void setId(int id) {
+	protected void setId(int id) {
 		m_id = id;
 	}
 

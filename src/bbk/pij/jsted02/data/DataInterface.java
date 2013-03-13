@@ -172,4 +172,37 @@ public class DataInterface {
 		}
 		return contacts;
 	}
+
+	/**
+	 * Method to update a meeting in the data store, takes a meeting object to
+	 * update, uses the meeting ID to find the meeting, removes the meeting and
+	 * inserts the new meeting.
+	 * 
+	 * @param meeting
+	 *            Meeting object to update.
+	 *            
+	 * @throws IllegalArgumentException
+	 */
+	
+	public void updMeeting(Meeting meeting) {
+
+		int meetingLocation = -1;
+		List<Object> storedMeetings = m_data.get(DataType.MEETING);
+		for(int i = 0; i < storedMeetings.size(); ++i)
+		{
+			if(((Meeting)storedMeetings.get(i)).getId() == meeting.getId())
+			{
+				meetingLocation = i;
+				break;
+			}
+		}
+		
+		if(meetingLocation == -1)
+		{
+			throw new IllegalArgumentException("Meeting ("+meeting.getId()+") does not exist in data store.");
+		}
+		storedMeetings.remove(meetingLocation);
+		
+		storedMeetings.add(meeting);
+	}
 }
