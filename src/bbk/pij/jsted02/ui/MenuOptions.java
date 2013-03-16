@@ -1,7 +1,9 @@
 package bbk.pij.jsted02.ui;
 
 import bbk.pij.jsted02.ui.interfaces.MenuOption;
-
+/**
+ * @author Luke Stedman (jsted02), MSc CS Yr1 2012/13
+ */
 public class MenuOptions {
 
 	public enum MainMenuOption implements MenuOption

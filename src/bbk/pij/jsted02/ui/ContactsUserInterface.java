@@ -10,7 +10,9 @@ import java.util.Set;
 
 import bbk.pij.jsted02.interfaces.Contact;
 import bbk.pij.jsted02.interfaces.ContactManager;
-
+/**
+ * @author Luke Stedman (jsted02), MSc CS Yr1 2012/13
+ */
 public class ContactsUserInterface
 {
 	/**

@@ -8,7 +8,9 @@ package bbk.pij.jsted02.ui;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-
+/**
+ * @author Luke Stedman (jsted02), MSc CS Yr1 2012/13
+ */
 public class Utils {
 
 	public static int getIntInput(String prompt) throws NumberFormatException, IOException
