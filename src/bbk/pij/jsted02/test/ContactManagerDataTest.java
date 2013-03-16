@@ -16,6 +16,7 @@ import bbk.pij.jsted02.ContactManagerImpl;
 import bbk.pij.jsted02.interfaces.Contact;
 import bbk.pij.jsted02.interfaces.ContactManager;
 import bbk.pij.jsted02.interfaces.Meeting;
+import bbk.pij.jsted02.interfaces.PastMeeting;
 
 /**
  * @author Luke Stedman (jsted02), MSc CS Yr1 2012/13
@@ -99,12 +100,81 @@ public class ContactManagerDataTest {
         
     }
     
-    // Test that meetings are stored
+    @Test
+    public void checkContactsData() {
+        // Create CM App with wiped testing Data
+        ContactManager cmApp = new ContactManagerImpl(true, true);
+        for (int i = 1; i < 11; ++i) {
+            cmApp.addNewContact("TestContact" + i, "A test contact..." + i);
+        }
+        Set<Contact> contacts = cmApp.getContacts("TestContact");
+        
+        cmApp.flush();
+
+        cmApp = null;
+        cmApp = new ContactManagerImpl(true);
+        
+        Set<Contact> contacts1 = cmApp.getContacts("TestContact");
+        assertTrue(contacts.size() == contacts1.size());
+        
+    }
+
+    @Test
+    public void checkFutureMeetings() {
+        // Create CM App with wiped testing Data
+        ContactManager cmApp = new ContactManagerImpl(true, true);
+        cmApp.addNewContact("TestContact", "A test contact...");
+        Set<Contact> contacts = cmApp.getContacts("TestContact");
+        Calendar date = Calendar.getInstance();
     
-    // Test that contacts are stored
+        for (int i = 1; i < 10; ++i) {
+            date.add(Calendar.MONTH, i);
+            cmApp.addFutureMeeting(contacts, date);
+        }
+        
+        List<Meeting> meetings = cmApp.getFutureMeetingList(contacts.iterator()
+                .next());
+        cmApp.flush();
+
+        cmApp = null;
+        cmApp = new ContactManagerImpl(true);
+
+        for(Meeting meeting: meetings)
+        {
+            assertFalse("Meeting id ("+meeting.getId()+") is null", cmApp.getFutureMeeting(meeting.getId()) == null);
+            assertTrue(cmApp.getFutureMeeting(meeting.getId()).getDate().compareTo(meeting.getDate()) == 0);
+        }
+        
+    }
+
+    @Test
+    public void checkPastMeeting() {
+        // Create CM App with wiped testing Data
+        ContactManager cmApp = new ContactManagerImpl(true, true);
+        cmApp.addNewContact("TestContact", "A test contact...");
+        Set<Contact> contacts = cmApp.getContacts("TestContact");
+        Calendar date = Calendar.getInstance();
     
-    // Test that id's are consistent for meetings
-    
+        for (int i = 1; i < 10; ++i) {
+            date.add(Calendar.MONTH, i * -1);
+            cmApp.addNewPastMeeting(contacts, date, "Past Meeting..." + i);
+        }
+        
+        List<PastMeeting> meetings = cmApp.getPastMeetingList(contacts.iterator()
+                .next());
+        cmApp.flush();
+
+        cmApp = null;
+        cmApp = new ContactManagerImpl(true);
+
+        for(PastMeeting meeting: meetings)
+        {
+            assertFalse("Meeting id ("+meeting.getId()+") is null", cmApp.getPastMeeting(meeting.getId()) == null);
+            assertTrue(cmApp.getPastMeeting(meeting.getId()).getDate().compareTo(meeting.getDate()) == 0);
+            assertTrue(cmApp.getPastMeeting(meeting.getId()).getNotes().equals(meeting.getNotes()));
+        }
+        
+    }
     // Test that id's are consistent for contacts
     
 }
