@@ -23,7 +23,6 @@ import bbk.pij.jsted02.interfaces.Meeting;
 import bbk.pij.jsted02.interfaces.PastMeeting;
 import bbk.pij.jsted02.meetings.FutureMeetingImpl;
 import bbk.pij.jsted02.meetings.PastMeetingImpl;
-import bbk.pij.jsted02.test.utils.TestHelper;
 /**
  * @author Luke Stedman (jsted02), MSc CS Yr1 2012/13
  */
@@ -47,39 +46,38 @@ public class ContactManagerTest {
 	 */
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
-		cmApp = new ContactManagerImpl();
-		contacts = new HashSet<Contact>(TestHelper.generateContacts(10));
+		cmApp = new ContactManagerImpl(true, true);
 
 		cmApp.addNewContact("Test1", "Test contact 1");
 		cmApp.addNewContact("Test2", "Test contact 2");
+        contacts = cmApp.getContacts("Test");
 
 		Set<Contact> meetingContacts = cmApp.getContacts("Test1");
 
 		// Add a future meeting
-		date1.set(Calendar.YEAR, 2001);
-		date2.set(Calendar.YEAR, 2003);
-		date3.set(Calendar.YEAR, 2010);
-		date4.set(Calendar.YEAR, 2015);
-		date5.set(Calendar.YEAR, 2017);
-		date6.set(Calendar.YEAR, 2020);
-
+        date6.set(Calendar.YEAR, 2020);
 		cmApp.addFutureMeeting(meetingContacts, date6);
 
-		// Add a meeting in the past
+        // Add a meeting in the past
+        date1.set(Calendar.YEAR, 2001);
 		cmApp.addNewPastMeeting(meetingContacts, date1,
 				"Some notes...");
 
-		// Add a second future meeting
+        // Add a second future meeting
+        date4.set(Calendar.YEAR, 2015);
 		cmApp.addFutureMeeting(meetingContacts, date4);
 
-		// Add a third future meeting
+        // Add a third future meeting
+        date5.set(Calendar.YEAR, 2017);
 		cmApp.addFutureMeeting(meetingContacts, date5);
 
-		// Add a second meeting in the past
+        // Add a second meeting in the past
+        date2.set(Calendar.YEAR, 2003);
 		cmApp.addNewPastMeeting(meetingContacts, date2,
 				"Some notes...");
 
-		// Add a third meeting in the past
+        // Add a third meeting in the past
+        date3.set(Calendar.YEAR, 2010);
 		cmApp.addNewPastMeeting(meetingContacts, date3,
 				"Some notes...");
 
