@@ -173,6 +173,7 @@ public class ContactManagerImpl implements ContactManager {
         // Otherwise all is good and we can continue, create the meeting and
         // set the various attributes, add to the data and return the id
         FutureMeetingImpl meeting = new FutureMeetingImpl();
+        meeting.setId(m_dataInterface.getAllMeetings().size());
         meeting.setDate(date);
         meeting.setContacts(contacts);
         m_dataInterface.addMeeting(meeting);
@@ -323,6 +324,7 @@ public class ContactManagerImpl implements ContactManager {
         // Create a new meeting, set the various attributes and add to the data
         // interface
         PastMeetingImpl meeting = new PastMeetingImpl();
+        meeting.setId(m_dataInterface.getAllMeetings().size());
         meeting.setContacts(contacts);
         meeting.setDate(date);
         meeting.setNotes(text);
@@ -392,6 +394,7 @@ public class ContactManagerImpl implements ContactManager {
         // Create contact, set name and notes and add contact to the
         // data interface
         ContactImpl contact = new ContactImpl();
+        contact.setId(m_dataInterface.getAllContacts().size());
         contact.setName(name);
         contact.addNotes(notes);
         m_dataInterface.addContact(contact);

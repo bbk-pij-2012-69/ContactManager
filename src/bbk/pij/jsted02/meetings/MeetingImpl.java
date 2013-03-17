@@ -42,11 +42,6 @@ public class MeetingImpl implements Meeting {
 
 	// Members
     /**
-     * Static count to increment with each created Meeting.
-     */
-    private static int                m_meeting_count     = 0;
-    
-    /**
      * Member id variable
      */
     int                               m_id;
@@ -66,7 +61,6 @@ public class MeetingImpl implements Meeting {
      * Only Past/Future meetings should be created.
      */
     protected MeetingImpl() {
-        setId(MeetingImpl.m_meeting_count++);
     }
     
     /*
@@ -84,7 +78,7 @@ public class MeetingImpl implements Meeting {
      * @param integer
      *            id to set.
      */
-    protected void setId(int id) {
+    public void setId(int id) {
         m_id = id;
     }
     

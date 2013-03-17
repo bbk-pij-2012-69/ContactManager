@@ -13,10 +13,6 @@ public class ContactImpl implements Contact {
     
     // Members
     /**
-     * Static ID increments when each Contact is created.
-     */
-    private static int contactCount = 0;
-    /**
      * Notes associate with the Contact.
      */
     private String     m_notes      = "";
@@ -35,7 +31,6 @@ public class ContactImpl implements Contact {
      * Empty constructor for serialisation
      */
     public ContactImpl() {
-        setId(ContactImpl.contactCount++);
     }
     
     // Setters and Getters
@@ -56,7 +51,7 @@ public class ContactImpl implements Contact {
      * @param id
      *            Integer id of Contact
      */
-    private void setId(int id) {
+    public void setId(int id) {
         m_id = id;
     }
     
