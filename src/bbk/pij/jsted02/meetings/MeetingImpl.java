@@ -44,7 +44,7 @@ public class MeetingImpl implements Meeting {
     /**
      * Member id variable
      */
-    int                               m_id;
+    int                               m_id = -1;
     
     /**
      * Member date variable

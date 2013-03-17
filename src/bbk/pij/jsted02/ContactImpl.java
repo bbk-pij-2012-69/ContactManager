@@ -24,7 +24,7 @@ public class ContactImpl implements Contact {
     /**
      * ID of the contact
      */
-    private int        m_id;
+    private int        m_id = -1;
     
     // Constructor
     /**

@@ -80,27 +80,6 @@ public class ContactManagerImpl implements ContactManager {
     
     // Private Methods
     /**
-     * Method to get an array of id's from the provided set of contacts.
-     * 
-     * @param contacts
-     *            Set of Contacts to get ID's for.
-     * @return Integer array containing id's of contacts.
-     */
-    private int[] getContactIds(Set<Contact> contacts) {
-        // Initialise a counter and array that will be returned
-        int count = 0;
-        int[] ids = new int[contacts.size()];
-        
-        // Iterate over each contact, add id to the array and increment the
-        // count
-        for (Contact contact : contacts) {
-            ids[count++] = contact.getId();
-        }
-        
-        return ids;
-    }
-    
-    /**
      * Checks if all contacts are present in the data set, if not it throws an
      * IllegalArgumentException.
      * 
@@ -155,8 +134,14 @@ public class ContactManagerImpl implements ContactManager {
      */
     @Override
     public int addFutureMeeting(Set<Contact> contacts, Calendar date) {
-        // Using the getContactId's method get all known contacts from the data
-        Set<Contact> foundContacts = getContacts(getContactIds(contacts));
+        // Using the getContact's method get all known contacts from the data
+        int[] contactIds = new int[contacts.size()];
+        int contactCount = 0;
+        for (Contact contact : contacts) {
+            contactIds[contactCount++] = contact.getId();
+        }
+        
+        Set<Contact> foundContacts = getContacts(contactIds);
         
         // Check if the no. of contacts provided matches the number of contacts
         // found in the data, if not throw an exception
