@@ -163,7 +163,6 @@ public class ContactManagerDataTest {
         List<PastMeeting> meetings = cmApp.getPastMeetingList(contacts.iterator()
                 .next());
         cmApp.flush();
-
         cmApp = null;
         cmApp = new ContactManagerImpl(true);
 
@@ -175,6 +174,23 @@ public class ContactManagerDataTest {
         }
         
     }
-    // Test that id's are consistent for contacts
+
+    @Test
+    public void checkContacts(){
+        ContactManager cmApp = new ContactManagerImpl(true, true);
+        for (int i = 1; i < 10; ++i) {
+            cmApp.addNewContact("TestContact" + i, "A test contact..." + i);
+        }
+        Set<Contact> contacts = cmApp.getContacts("TestContact");
+        cmApp.flush();
+        cmApp = null;
+        cmApp = new ContactManagerImpl(true);
     
+        for(Contact contact: contacts)
+        {
+            assertFalse("Contact id ("+contact.getId()+") is null", cmApp.getContacts(contact.getId()) == null);
+            assertTrue(cmApp.getContacts(contact.getId()).iterator().next().getName().equals(contact.getName()));
+            assertTrue(cmApp.getContacts(contact.getId()).iterator().next().getNotes().equals(contact.getNotes()));
+        }
+    }
 }
