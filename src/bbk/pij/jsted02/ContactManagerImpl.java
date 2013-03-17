@@ -80,22 +80,6 @@ public class ContactManagerImpl implements ContactManager {
     
     // Private Methods
     /**
-     * Checks if all contacts are present in the data set, if not it throws an
-     * IllegalArgumentException.
-     * 
-     * @param contacts
-     *            Set of contacts to check
-     * @throws IllegalArgumentException
-     */
-    private void checkContacts(Set<Contact> contacts)
-            throws IllegalArgumentException {
-        // Iterate over contacts and call checkContact on each one
-        for (Contact contact : contacts) {
-            checkContact(contact);
-        }
-    }
-    
-    /**
      * Checks if an individual contact is present in the data set, if not it
      * throws an IllegalArgumentException.
      * 
@@ -135,6 +119,7 @@ public class ContactManagerImpl implements ContactManager {
     @Override
     public int addFutureMeeting(Set<Contact> contacts, Calendar date) {
         // Using the getContact's method get all known contacts from the data
+        // interface, if a contact doesn't exist it will throw an exception
         int[] contactIds = new int[contacts.size()];
         int contactCount = 0;
         for (Contact contact : contacts) {
@@ -143,25 +128,21 @@ public class ContactManagerImpl implements ContactManager {
         
         Set<Contact> foundContacts = getContacts(contactIds);
         
-        // Check if the no. of contacts provided matches the number of contacts
-        // found in the data, if not throw an exception
-        if (contacts.size() != foundContacts.size()) {
-            throw new IllegalArgumentException(
-                    "Invalid contact - a contact supplied is not known.");
-        }
         // Check the date provided, if in the past throw an exception.
-        else if (date.compareTo(Calendar.getInstance()) <= 0) {
+        if (date.compareTo(Calendar.getInstance()) <= 0) {
             throw new IllegalArgumentException(
                     "Invalid date - must be in the future.");
         }
         
-        // Otherwise all is good and we can continue, create the meeting and
-        // set the various attributes, add to the data and return the id
+        // All is good and we can continue, create the meeting and set the
+        // various attributes, add to the data and return the id
         FutureMeetingImpl meeting = new FutureMeetingImpl();
+        
         meeting.setId(m_dataInterface.getAllMeetings().size());
         meeting.setDate(date);
-        meeting.setContacts(contacts);
+        meeting.setContacts(foundContacts);
         m_dataInterface.addMeeting(meeting);
+        
         return meeting.getId();
     }
     
@@ -231,13 +212,24 @@ public class ContactManagerImpl implements ContactManager {
      */
     @Override
     public List<Meeting> getFutureMeetingList(Calendar date) {
+        
+        // Get the full list of future meetings and create a new list to store
+        // the filtered meetings
         List<Meeting> allMeetings = m_dataInterface.getAllMeetings();
         List<Meeting> returnedMeetings = new ArrayList<Meeting>();
+        
+        // Create a calendar instance to store the date specified (the
+        // specification requires meetings on the same day to be returned, as
+        // such we need to ignore the hours and minutes)
         Calendar compareDate = Calendar.getInstance();
         compareDate.clear();
         compareDate.set(date.get(Calendar.YEAR), date.get(Calendar.MONTH),
                 date.get(Calendar.DATE));
         
+        // Iterate over each meeting and create a Calendar value based on the
+        // date (again excluding hours and minutes).
+        // If the date matches the date supplied then append to the list of
+        // meetings to return.
         for (Object meeting : allMeetings) {
             Calendar meetingDate = Calendar.getInstance();
             meetingDate.clear();
@@ -249,11 +241,15 @@ public class ContactManagerImpl implements ContactManager {
             }
         }
         
+        // If the date is in the future then sort the meetings in ascending
+        // order (nearest first), if earlier than now sort in descending order
+        // (again nearest first)
         if (Calendar.getInstance().compareTo(compareDate) == -1) {
             Collections.sort(returnedMeetings, MeetingImpl.COMPARATOR_DATE_ASC);
         } else {
             Collections.sort(returnedMeetings, MeetingImpl.COMPARATOR_DATE_DSC);
         }
+        
         return returnedMeetings;
     }
     
@@ -263,7 +259,7 @@ public class ContactManagerImpl implements ContactManager {
     @Override
     public List<PastMeeting> getPastMeetingList(Contact contact) {
         
-        // Call checkContact method, throws and IllegalArgument if the contact
+        // Call checkContact method, throws an IllegalArgument if the contact
         // does not exist
         checkContact(contact);
         
@@ -304,7 +300,9 @@ public class ContactManagerImpl implements ContactManager {
         }
         
         // Run checkContacts on the set of contacts
-        checkContacts(contacts);
+        for (Contact contact : contacts) {
+            checkContact(contact);
+        }
         
         // Create a new meeting, set the various attributes and add to the data
         // interface
@@ -371,6 +369,7 @@ public class ContactManagerImpl implements ContactManager {
      */
     @Override
     public void addNewContact(String name, String notes) {
+        // Check name and notes are non-null values.
         if (name == null || notes == null) {
             throw new NullPointerException(
                     "Both name and notes must be set, null value found");
@@ -390,24 +389,19 @@ public class ContactManagerImpl implements ContactManager {
      */
     @Override
     public Set<Contact> getContacts(int... ids) {
-        // Create list of all contacts and a new set for the returned contacts
-        List<Contact> contactsList = m_dataInterface.getAllContacts();
-        
+        // Create list to return containing the contacts
         Set<Contact> returnContacts = new HashSet<Contact>();
         
+        // Iterate over each id provided and get the contact
         for (int i = 0; i < ids.length; ++i) {
-            boolean missing = true;
-            for (Contact contact : contactsList) {
-                
-                if (ids[i] == contact.getId()) {
-                    missing = false;
-                    returnContacts.add(contact);
-                    break;
-                }
-            }
-            
-            if (missing) {
-                throw new IllegalArgumentException("Contact does not exist.");
+            Contact contact = m_dataInterface.getContact(ids[i]);
+            // If the contact is null then throw, otherwise append to the
+            // returned list
+            if (contact == null) {
+                throw new IllegalArgumentException("Contact (" + ids[i]
+                        + ") does not exist.");
+            } else {
+                returnContacts.add(contact);
             }
         }
         
@@ -432,7 +426,6 @@ public class ContactManagerImpl implements ContactManager {
                 returnContacts.add(contact);
             }
         }
-        
         return returnContacts;
     }
     

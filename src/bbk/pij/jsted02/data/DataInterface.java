@@ -82,9 +82,10 @@ public class DataInterface {
      */
     private void init(boolean test, boolean wipe) {
         m_serialiser = new DataSerialiser(FILE_NAME, test, wipe);
-        this.m_data = m_serialiser.getData();
+        m_data = m_serialiser.getData();
     }
     
+    // Public interfaces.
     /**
      * Get contact method, returns the contact if it matches the id of a contact
      * in the data store, otherwise returns null.
@@ -93,19 +94,17 @@ public class DataInterface {
      *            Integer id of contact to find.
      * @return Contact object if present, null if not present.
      */
-    private ContactImpl getContact(int id) {
+    public Contact getContact(int id) {
         // Loop over each contact in the data store.
-        for (int i = 0; i < this.m_data.get(DataType.CONTACT).size(); ++i) {
+        for (int i = 0; i < m_data.get(DataType.CONTACT).size(); ++i) {
             // If the contact's id matches the provided id, return it.
-            if (((ContactImpl) this.m_data.get(DataType.CONTACT).get(i))
-                    .getId() == id)
-                return (ContactImpl) this.m_data.get(DataType.CONTACT).get(i);
+            if (((Contact) m_data.get(DataType.CONTACT).get(i)).getId() == id)
+                return (Contact) m_data.get(DataType.CONTACT).get(i);
         }
         // Return null if not present.
         return null;
     }
     
-    // Public interfaces.
     /**
      * Get contacts method, returns a list of contacts based on the input id's.
      * 
@@ -113,16 +112,16 @@ public class DataInterface {
      *            Integer array of id's of contacts to return.
      * @return List of Contacts.
      */
-    public List<ContactImpl> getContacts(int... ids) {
+    public List<Contact> getContacts(int... ids) {
         // Create an empty list of contacts.
-        List<ContactImpl> returnedContacts = new ArrayList<ContactImpl>();
+        List<Contact> returnedContacts = new ArrayList<Contact>();
         
         // Loop over each id, search for it in the contact store.
         for (int i = 0; i < ids.length; ++i) {
-            ContactImpl contact = this.getContact(ids[i]);
+            Contact contact = getContact(ids[i]);
             // If the contact is present append to the list.
             if (contact != null) {
-                returnedContacts.add(this.getContact(ids[i]));
+                returnedContacts.add(getContact(ids[i]));
             }
         }
         // Return list
@@ -153,7 +152,7 @@ public class DataInterface {
      * Flush function to save data to disk safely.
      */
     public void flush() {
-        m_serialiser.flush(this.m_data);
+        m_serialiser.flush(m_data);
     }
     
     /**
@@ -165,10 +164,10 @@ public class DataInterface {
      */
     public Meeting getMeeting(int id) {
         // Loop over each contact in the data store.
-        for (int i = 0; i < this.m_data.get(DataType.MEETING).size(); ++i) {
+        for (int i = 0; i < m_data.get(DataType.MEETING).size(); ++i) {
             // If the ID matches the provided id return
-            if (((Meeting) this.m_data.get(DataType.MEETING).get(i)).getId() == id)
-                return (Meeting) this.m_data.get(DataType.MEETING).get(i);
+            if (((Meeting) m_data.get(DataType.MEETING).get(i)).getId() == id)
+                return (Meeting) m_data.get(DataType.MEETING).get(i);
         }
         // Return null if not present.
         return null;
