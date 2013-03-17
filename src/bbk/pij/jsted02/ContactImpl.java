@@ -15,16 +15,16 @@ public class ContactImpl implements Contact {
     /**
      * Notes associate with the Contact.
      */
-    private String     m_notes      = "";
+    private String m_notes = "";
     /**
      * Name of contact.
      */
-    private String     m_name;
+    private String m_name;
     
     /**
      * ID of the contact
      */
-    private int        m_id = -1;
+    private int    m_id    = -1;
     
     // Constructor
     /**

@@ -74,10 +74,8 @@ public class DataSerialiser {
             verifyFile(wipe);
             loadData();
         } catch (FileNotFoundException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         } catch (IOException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
     }
@@ -101,7 +99,6 @@ public class DataSerialiser {
             // create the folder path.
             if (!m_file.getParentFile().exists())
                 m_file.getParentFile().mkdirs();
-            
         }
         
         if (newFile || wipe) {
@@ -140,7 +137,7 @@ public class DataSerialiser {
             Files.copy(Paths.get(m_file.toURI()), Paths.get(tmpFile.toURI()),
                     java.nio.file.StandardCopyOption.REPLACE_EXISTING);
         } catch (IOException e) {
-            // TODO - handle exception, what is the most graceful way?
+            e.printStackTrace();
         }
     }
     
@@ -186,7 +183,7 @@ public class DataSerialiser {
             xmlEncoder = new XMLEncoder(getoutputStream());
             xmlEncoder.writeObject(data);
         } catch (FileNotFoundException e) {
-            // TODO - handle exception
+            e.printStackTrace();
         } finally {
             xmlEncoder.close();
         }

@@ -10,5 +10,5 @@ import bbk.pij.jsted02.interfaces.FutureMeeting;
  */
 
 public class FutureMeetingImpl extends MeetingImpl implements FutureMeeting {
-	
+    
 }

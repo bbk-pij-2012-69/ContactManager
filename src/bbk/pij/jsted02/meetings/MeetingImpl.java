@@ -39,12 +39,12 @@ public class MeetingImpl implements Meeting {
 			return m2.getDate().compareTo(m1.getDate());
 		}
 	};
-
-	// Members
+    
+    // Members
     /**
      * Member id variable
      */
-    int                               m_id = -1;
+    int                               m_id                = -1;
     
     /**
      * Member date variable

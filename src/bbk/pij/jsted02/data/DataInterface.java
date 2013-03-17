@@ -211,8 +211,11 @@ public class DataInterface {
      * @throws IllegalArgumentException
      */
     public void updMeeting(Meeting meeting) {
-        
+        // Initialise meeting location value to an invalid point
         int meetingLocation = -1;
+        
+        // Iterate over all the meetings and get the location of the meeting
+        // with the same id
         List<Object> storedMeetings = m_data.get(DataType.MEETING);
         for (int i = 0; i < storedMeetings.size(); ++i) {
             if (((Meeting) storedMeetings.get(i)).getId() == meeting.getId()) {
@@ -221,12 +224,14 @@ public class DataInterface {
             }
         }
         
+        // If the meeting location is invalid then throw
         if (meetingLocation == -1) {
             throw new IllegalArgumentException("Meeting (" + meeting.getId()
                     + ") does not exist in data store.");
         }
-        storedMeetings.remove(meetingLocation);
         
+        // Remove the old meeting and add the updated one
+        storedMeetings.remove(meetingLocation);
         storedMeetings.add(meeting);
     }
 }
